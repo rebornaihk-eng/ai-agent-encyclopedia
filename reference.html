@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reference - AI Agent Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-50: #EEF2FF;
+            --brand-100: #E0E7FF;
+            --brand-500: #6366F1;
+            --brand-600: #4F46E5;
+            --brand-700: #4338CA;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); background: var(--gray-50); color: var(--gray-800); line-height: 1.6; }
+        
+        .nav { background: white; border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.25rem; color: var(--gray-900); text-decoration: none; }
+        .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--brand-500), var(--brand-700)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; }
+        .nav-links { display: flex; gap: 4px; }
+        .nav-link { padding: 8px 16px; border-radius: 8px; color: var(--gray-600); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: all 0.15s; }
+        .nav-link:hover { background: var(--gray-100); color: var(--gray-900); }
+        .nav-link.active { background: var(--brand-50); color: var(--brand-600); }
+        
+        .page-header { background: white; border-bottom: 1px solid var(--gray-200); padding: 32px 24px; }
+        .page-header-content { max-width: 1280px; margin: 0 auto; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { color: var(--gray-500); }
+        
+        .tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--gray-200); padding-bottom: 12px; overflow-x: auto; }
+        .tab { padding: 8px 16px; border: none; background: none; font-size: 0.85rem; font-weight: 500; color: var(--gray-500); cursor: pointer; border-radius: 6px; white-space: nowrap; }
+        .tab:hover { background: var(--gray-100); }
+        .tab.active { background: var(--brand-500); color: white; }
+        
+        .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: 220px 1fr; gap: 32px; }
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .sidebar { display: none; } }
+        
+        .sidebar { position: sticky; top: 96px; align-self: start; }
+        .sidebar-section { margin-bottom: 24px; }
+        .sidebar-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-400); margin-bottom: 8px; }
+        .sidebar-link { display: block; padding: 6px 12px; color: var(--gray-600); text-decoration: none; font-size: 0.875rem; border-radius: 6px; transition: all 0.15s; }
+        .sidebar-link:hover { background: var(--gray-100); color: var(--gray-900); }
+        
+        .section { margin-bottom: 48px; }
+        .section h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--brand-500); display: inline-block; }
+        
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        
+        .tool-card { background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); }
+        .tool-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+        .tool-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+        .tool-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
+        .tool-meta { display: flex; gap: 8px; font-size: 0.75rem; color: var(--gray-500); }
+        .tool-desc { color: var(--gray-600); font-size: 0.85rem; margin-bottom: 10px; }
+        
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+        .tech-tag { padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 500; background: var(--gray-100); color: var(--gray-600); }
+        .tag-oss { background: #DCFCE7; color: #166534; }
+        .tag-hot { background: #FEE2E2; color: #991B1B; }
+        .tag-new { background: #DBEAFE; color: #1D4ED8; }
+        .tag-python { background: #3776AB20; color: #3776AB; }
+        .tag-js { background: #F7DF1E20; color: #B8860B; }
+        .tag-ts { background: #3178C620; color: #3178C6; }
+        .tag-go { background: #00ADD820; color: #00ADD8; }
+        .tag-rust { background: #DEA58420; color: #B7410E; }
+        
+        .tech-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
+        .tech-table th { text-align: left; padding: 6px 8px; background: var(--gray-50); border-bottom: 2px solid var(--gray-200); font-weight: 600; }
+        .tech-table td { padding: 6px 8px; border-bottom: 1px solid var(--gray-100); }
+        
+        .comparison-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: white; border-radius: var(--radius-lg); overflow: hidden; }
+        .comparison-table th { text-align: left; padding: 10px 12px; background: var(--gray-50); border-bottom: 2px solid var(--gray-200); font-weight: 600; }
+        .comparison-table td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); }
+        .comparison-table tr:hover { background: var(--gray-50); }
+        
+        .arch-diagram { background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); margin-bottom: 16px; }
+        .arch-diagram h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
+        .arch-diagram svg { max-width: 100%; height: auto; }
+        
+        .footer { background: var(--gray-900); color: white; padding: 32px 24px; margin-top: 64px; text-align: center; font-size: 0.875rem; }
+        .footer a { color: var(--gray-400); text-decoration: none; }
+        .footer a:hover { color: white; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="home.html" class="logo">
+                <div class="logo-icon">📚</div>
+                AI Agent Encyclopedia
+            </a>
+            <div class="nav-links">
+                <a href="reference.html" class="nav-link active">Reference</a>
+                <a href="design.html" class="nav-link">Design</a>
+                <a href="innovate.html" class="nav-link">Innovate</a>
+                <a href="build.html" class="nav-link">Build</a>
+                <a href="learn.html" class="nav-link">Learn</a>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>📖 Reference</h1>
+            <p>Complete reference for AI agent frameworks, tools, and technologies</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">LLM Models</div>
+                <a href="#claude" class="sidebar-link">Claude 4</a>
+                <a href="#gpt" class="sidebar-link">GPT-4o/o3</a>
+                <a href="#gemini" class="sidebar-link">Gemini 2.5</a>
+                <a href="#deepseek" class="sidebar-link">DeepSeek R1</a>
+                <a href="#qwen" class="sidebar-link">Qwen 3</a>
+                <a href="#llama" class="sidebar-link">Llama 4</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Frameworks</div>
+                <a href="#langchain" class="sidebar-link">LangChain</a>
+                <a href="#langgraph" class="sidebar-link">LangGraph</a>
+                <a href="#crewai" class="sidebar-link">CrewAI</a>
+                <a href="#autogen" class="sidebar-link">AutoGen</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Coding Agents</div>
+                <a href="#claude-code" class="sidebar-link">Claude Code</a>
+                <a href="#cursor" class="sidebar-link">Cursor</a>
+                <a href="#devin" class="sidebar-link">Devin</a>
+                <a href="#windsurf" class="sidebar-link">Windsurf</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Architecture</div>
+                <a href="#arch-rag" class="sidebar-link">RAG Pattern</a>
+                <a href="#arch-multi" class="sidebar-link">Multi-Agent</a>
+                <a href="#arch-flow" class="sidebar-link">Agent Flow</a>
+            </div>
+        </aside>
+        
+        <div class="content">
+            <!-- LLM Models -->
+            <section class="section" id="models">
+                <h2>🧠 SOTA LLM Models (2025-2026)</h2>
+                
+                <div class="tool-grid">
+                    <div class="tool-card" id="claude">
+                        <div class="tool-header">
+                            <div class="tool-icon">🧠</div>
+                            <div class="tool-info">
+                                <h3>Claude 4</h3>
+                                <div class="tool-meta"><span>Anthropic</span> <span>200K context</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Best for extended thinking, complex reasoning. Opus > Sonnet > Haiku tiers.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-hot">🔥 Hot</span>
+                            <span class="tech-tag">Extended Thinking</span>
+                            <span class="tech-tag">200K tokens</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="gpt">
+                        <div class="tool-header">
+                            <div class="tool-icon">🤖</div>
+                            <div class="tool-info">
+                                <h3>GPT-4o / o3</h3>
+                                <div class="tool-meta"><span>OpenAI</span> <span>128K context</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Industry standard. Best function calling, multimodal, fast inference.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Function Calling</span>
+                            <span class="tech-tag">Vision</span>
+                            <span class="tech-tag">128K tokens</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="gemini">
+                        <div class="tool-header">
+                            <div class="tool-icon">💎</div>
+                            <div class="tool-info">
+                                <h3>Gemini 2.5 Pro</h3>
+                                <div class="tool-meta"><span>Google</span> <span>1M+ context</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Longest context window. Native multimodal, best for large documents.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-new">1M+ context</span>
+                            <span class="tech-tag">Multimodal</span>
+                            <span class="tech-tag">Free tier</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="deepseek">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔮</div>
+                            <div class="tool-info">
+                                <h3>DeepSeek R1</h3>
+                                <div class="tool-meta"><span>DeepSeek</span> <span>Reasoning</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Open reasoning model. Competitive with o1 at fraction of cost.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-hot">🔥 Hot</span>
+                            <span class="tech-tag tag-oss">Open Weights</span>
+                            <span class="tech-tag">Reasoning</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="qwen">
+                        <div class="tool-header">
+                            <div class="tool-icon">⛰️</div>
+                            <div class="tool-info">
+                                <h3>Qwen 3</h3>
+                                <div class="tool-meta"><span>Alibaba</span> <span>Multilingual</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Best Chinese/English bilingual. Strong coding, multiple sizes.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-oss">Open Weights</span>
+                            <span class="tech-tag">0.5B-72B</span>
+                            <span class="tech-tag">Chinese</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="llama">
+                        <div class="tool-header">
+                            <div class="tool-icon">🦙</div>
+                            <div class="tool-info">
+                                <h3>Llama 4</h3>
+                                <div class="tool-meta"><span>Meta</span> <span>Open Source</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Most capable open model. Scout/Maverick variants for different use cases.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-oss">Open Weights</span>
+                            <span class="tech-tag">Multimodal</span>
+                            <span class="tech-tag">Local</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🌀</div>
+                            <div class="tool-info">
+                                <h3>Mistral Large 2</h3>
+                                <div class="tool-meta"><span>Mistral</span> <span>128K context</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">European AI leader. Strong multilingual, efficient inference.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">128K tokens</span>
+                            <span class="tech-tag">EU-based</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🌙</div>
+                            <div class="tool-info">
+                                <h3>Kimi K2</h3>
+                                <div class="tool-meta"><span>Moonshot</span> <span>256K context</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Chinese leader. Exceptional long-context, competitive pricing.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-new">K2.5</span>
+                            <span class="tech-tag">256K tokens</span>
+                            <span class="tech-tag">Chinese</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- LLM Comparison Table -->
+            <section class="section">
+                <h2>LLM Comparison</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr><th>Model</th><th>Context</th><th>Reasoning</th><th>Price (1M tokens)</th><th>Best For</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Claude 4 Opus</strong></td><td>200K</td><td>✅ Extended</td><td>$15/$75</td><td>Complex tasks</td></tr>
+                        <tr><td><strong>Claude 4 Sonnet</strong></td><td>200K</td><td>✅ Extended</td><td>$3/$15</td><td>General use</td></tr>
+                        <tr><td><strong>GPT-4o</strong></td><td>128K</td><td>❌</td><td>$2.5/$10</td><td>Function calling</td></tr>
+                        <tr><td><strong>o3</strong></td><td>200K</td><td>✅ Chain</td><td>$5/$15</td><td>Reasoning</td></tr>
+                        <tr><td><strong>Gemini 2.5 Pro</strong></td><td>1M+</td><td>✅</td><td>$1.25/$5</td><td>Long docs</td></tr>
+                        <tr><td><strong>DeepSeek R1</strong></td><td>128K</td><td>✅ Reasoning</td><td>$0.55/$2.19</td><td>Cost-effective</td></tr>
+                        <tr><td><strong>GLM-5</strong></td><td>200K</td><td>✅</td><td>Free/$0.5</td><td>Chinese tasks</td></tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <!-- Frameworks -->
+            <section class="section" id="frameworks">
+                <h2>🔧 Agent Frameworks</h2>
+                
+                <div class="tool-grid">
+                    <div class="tool-card" id="langchain">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔗</div>
+                            <div class="tool-info">
+                                <h3>LangChain</h3>
+                                <div class="tool-meta"><span>⭐ 100K+</span> <span>Python/JS</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Most popular framework. Chains, agents, RAG, 500+ integrations.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-hot">🔥 Most Popular</span>
+                            <span class="tech-tag tag-python">Python</span>
+                            <span class="tech-tag tag-js">JS</span>
+                            <span class="tech-tag tag-oss">MIT</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="langgraph">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔄</div>
+                            <div class="tool-info">
+                                <h3>LangGraph</h3>
+                                <div class="tool-meta"><span>⭐ 8K+</span> <span>State Machines</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Graph-based workflows with cycles, persistence, human-in-loop.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-python">Python</span>
+                            <span class="tech-tag">Cyclic</span>
+                            <span class="tech-tag">Persistent</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="crewai">
+                        <div class="tool-header">
+                            <div class="tool-icon">🤝</div>
+                            <div class="tool-info">
+                                <h3>CrewAI</h3>
+                                <div class="tool-meta"><span>⭐ 25K+</span> <span>Multi-Agent</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Role-based multi-agent orchestration. Teams with roles/goals.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-hot">🔥 Rising</span>
+                            <span class="tech-tag tag-python">Python</span>
+                            <span class="tech-tag">Roles</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="autogen">
+                        <div class="tool-header">
+                            <div class="tool-icon">💬</div>
+                            <div class="tool-info">
+                                <h3>AutoGen</h3>
+                                <div class="tool-meta"><span>⭐ 35K+</span> <span>Microsoft</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Conversational multi-agent with code sandbox and visual builder.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Microsoft</span>
+                            <span class="tech-tag tag-python">Python</span>
+                            <span class="tech-tag">Studio</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">📖</div>
+                            <div class="tool-info">
+                                <h3>LlamaIndex</h3>
+                                <div class="tool-meta"><span>⭐ 36K+</span> <span>RAG Focus</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Data framework for LLMs. Best RAG tooling, document processing.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-python">Python</span>
+                            <span class="tech-tag tag-ts">TS</span>
+                            <span class="tech-tag">RAG</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🐝</div>
+                            <div class="tool-info">
+                                <h3>OpenAI Swarm</h3>
+                                <div class="tool-meta"><span>Experimental</span> <span>Lightweight</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Minimal multi-agent orchestration. Educational, lightweight.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-python">Python</span>
+                            <span class="tech-tag">Light</span>
+                            <span class="tech-tag">Edu</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Coding Agents -->
+            <section class="section" id="coders">
+                <h2>💻 AI Coding Agents</h2>
+                
+                <div class="tool-grid">
+                    <div class="tool-card" id="claude-code">
+                        <div class="tool-header">
+                            <div class="tool-icon">🧠</div>
+                            <div class="tool-info">
+                                <h3>Claude Code</h3>
+                                <div class="tool-meta"><span>Anthropic</span> <span>CLI</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Official Anthropic CLI. 200K context, git integration, file ops.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-hot">🔥 New</span>
+                            <span class="tech-tag tag-ts">TypeScript</span>
+                            <span class="tech-tag">200K ctx</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="cursor">
+                        <div class="tool-header">
+                            <div class="tool-icon">⚡</div>
+                            <div class="tool-info">
+                                <h3>Cursor</h3>
+                                <div class="tool-meta"><span>Cursor Inc</span> <span>$20/mo</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">AI-native IDE. @codebase context, Composer for multi-file edits.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-hot">🔥 Popular</span>
+                            <span class="tech-tag">VS Code</span>
+                            <span class="tech-tag">Composer</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="devin">
+                        <div class="tool-header">
+                            <div class="tool-icon">🤖</div>
+                            <div class="tool-info">
+                                <h3>Devin</h3>
+                                <div class="tool-meta"><span>Cognition</span> <span>$500/mo</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">First AI software engineer. Complete projects autonomously.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Autonomous</span>
+                            <span class="tech-tag">Full Stack</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card" id="windsurf">
+                        <div class="tool-header">
+                            <div class="tool-icon">🌊</div>
+                            <div class="tool-info">
+                                <h3>Windsurf</h3>
+                                <div class="tool-meta"><span>Codeium</span> <span>Free+</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">AI IDE by Codeium. Cascade flow for deep context.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-new">New</span>
+                            <span class="tech-tag">Cascade</span>
+                            <span class="tech-tag">Free tier</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🐙</div>
+                            <div class="tool-info">
+                                <h3>GitHub Copilot</h3>
+                                <div class="tool-meta"><span>GitHub</span> <span>$10/mo</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Industry standard. All IDEs, mature, widely adopted.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Standard</span>
+                            <span class="tech-tag">All IDEs</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">📝</div>
+                            <div class="tool-info">
+                                <h3>Aider</h3>
+                                <div class="tool-meta"><span>⭐ 25K+</span> <span>Open Source</span></div>
+                            </div>
+                        </div>
+                        <p class="tool-desc">CLI coding with git integration, voice, multi-model support.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag tag-oss">Apache 2.0</span>
+                            <span class="tech-tag tag-python">Python</span>
+                            <span class="tech-tag">Voice</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Architecture Diagrams -->
+            <section class="section" id="architecture">
+                <h2>📐 Architecture Patterns</h2>
+                
+                <div class="arch-diagram" id="arch-rag">
+                    <h3>RAG (Retrieval-Augmented Generation) Pattern</h3>
+                    <svg viewBox="0 0 600 300" width="100%">
+                        <!-- Background -->
+                        <rect fill="#F9FAFB" width="600" height="300" rx="8"/>
+                        
+                        <!-- User -->
+                        <rect x="20" y="120" width="80" height="50" rx="6" fill="#6366F1"/>
+                        <text x="60" y="150" text-anchor="middle" fill="white" font-size="12" font-weight="600">User Query</text>
+                        
+                        <!-- Agent -->
+                        <rect x="140" y="100" width="100" height="90" rx="8" fill="#4F46E5"/>
+                        <text x="190" y="135" text-anchor="middle" fill="white" font-size="11" font-weight="600">Agent</text>
+                        <text x="190" y="155" text-anchor="middle" fill="#C7D2FE" font-size="9">(Router)</text>
+                        <text x="190" y="175" text-anchor="middle" fill="#C7D2FE" font-size="9">LangChain</text>
+                        
+                        <!-- Retriever -->
+                        <rect x="280" y="100" width="100" height="90" rx="8" fill="#10B981"/>
+                        <text x="330" y="135" text-anchor="middle" fill="white" font-size="11" font-weight="600">Retriever</text>
+                        <text x="330" y="155" text-anchor="middle" fill="#A7F3D0" font-size="9">Vector Search</text>
+                        <text x="330" y="175" text-anchor="middle" fill="#A7F3D0" font-size="9">Pinecone/Chroma</text>
+                        
+                        <!-- Vector DB -->
+                        <rect x="420" y="60" width="100" height="60" rx="6" fill="#F59E0B"/>
+                        <text x="470" y="85" text-anchor="middle" fill="white" font-size="10" font-weight="600">Vector DB</text>
+                        <text x="470" y="105" text-anchor="middle" fill="#FEF3C7" font-size="8">Embeddings</text>
+                        
+                        <!-- Docs -->
+                        <rect x="420" y="140" width="100" height="60" rx="6" fill="#EF4444"/>
+                        <text x="470" y="165" text-anchor="middle" fill="white" font-size="10" font-weight="600">Documents</text>
+                        <text x="470" y="185" text-anchor="middle" fill="#FEE2E2" font-size="8">Chunked Text</text>
+                        
+                        <!-- LLM -->
+                        <rect x="280" y="220" width="100" height="60" rx="8" fill="#A855F7"/>
+                        <text x="330" y="245" text-anchor="middle" fill="white" font-size="11" font-weight="600">LLM</text>
+                        <text x="330" y="265" text-anchor="middle" fill="#E9D5FF" font-size="9">GPT-4/Claude</text>
+                        
+                        <!-- Arrows -->
+                        <path d="M100 145 L140 145" stroke="#6366F1" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M240 145 L280 145" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M330 100 L330 90 L420 90" stroke="#10B981" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M330 190 L330 170 L420 170" stroke="#10B981" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M330 190 L330 220" stroke="#A855F7" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M280 250 L240 250 L240 160" stroke="#A855F7" stroke-width="2" stroke-dasharray="4"/>
+                        
+                        <!-- Arrow marker -->
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#6366F1"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+                
+                <div class="arch-diagram" id="arch-multi">
+                    <h3>Multi-Agent Orchestration Pattern</h3>
+                    <svg viewBox="0 0 600 320" width="100%">
+                        <rect fill="#F9FAFB" width="600" height="320" rx="8"/>
+                        
+                        <!-- Orchestrator -->
+                        <rect x="220" y="20" width="160" height="60" rx="8" fill="#6366F1"/>
+                        <text x="300" y="45" text-anchor="middle" fill="white" font-size="12" font-weight="600">Orchestrator</text>
+                        <text x="300" y="65" text-anchor="middle" fill="#C7D2FE" font-size="9">CrewAI / AutoGen</text>
+                        
+                        <!-- Agents -->
+                        <rect x="40" y="140" width="100" height="70" rx="6" fill="#10B981"/>
+                        <text x="90" y="165" text-anchor="middle" fill="white" font-size="10" font-weight="600">Researcher</text>
+                        <text x="90" y="180" text-anchor="middle" fill="#A7F3D0" font-size="8">Web + Docs</text>
+                        <text x="90" y="195" text-anchor="middle" fill="#A7F3D0" font-size="8">Tavily API</text>
+                        
+                        <rect x="160" y="140" width="100" height="70" rx="6" fill="#3B82F6"/>
+                        <text x="210" y="165" text-anchor="middle" fill="white" font-size="10" font-weight="600">Writer</text>
+                        <text x="210" y="180" text-anchor="middle" fill="#BFDBFE" font-size="8">Content Gen</text>
+                        <text x="210" y="195" text-anchor="middle" fill="#BFDBFE" font-size="8">Claude 4</text>
+                        
+                        <rect x="280" y="140" width="100" height="70" rx="6" fill="#F59E0B"/>
+                        <text x="330" y="165" text-anchor="middle" fill="white" font-size="10" font-weight="600">Analyst</text>
+                        <text x="330" y="180" text-anchor="middle" fill="#FEF3C7" font-size="8">Data Analysis</text>
+                        <text x="330" y="195" text-anchor="middle" fill="#FEF3C7" font-size="8">Code Exec</text>
+                        
+                        <rect x="400" y="140" width="100" height="70" rx="6" fill="#EF4444"/>
+                        <text x="450" y="165" text-anchor="middle" fill="white" font-size="10" font-weight="600">Reviewer</text>
+                        <text x="450" y="180" text-anchor="middle" fill="#FEE2E2" font-size="8">Quality Check</text>
+                        <text x="450" y="195" text-anchor="middle" fill="#FEE2E2" font-size="8">Validation</text>
+                        
+                        <!-- Tools -->
+                        <rect x="120" y="260" width="80" height="40" rx="4" fill="#6B7280"/>
+                        <text x="160" y="285" text-anchor="middle" fill="white" font-size="9">Tools</text>
+                        
+                        <rect x="220" y="260" width="80" height="40" rx="4" fill="#6B7280"/>
+                        <text x="260" y="285" text-anchor="middle" fill="white" font-size="9">Memory</text>
+                        
+                        <rect x="320" y="260" width="80" height="40" rx="4" fill="#6B7280"/>
+                        <text x="360" y="285" text-anchor="middle" fill="white" font-size="9">LLM API</text>
+                        
+                        <!-- Arrows -->
+                        <path d="M260 80 L100 140" stroke="#6366F1" stroke-width="1.5"/>
+                        <path d="M290 80 L210 140" stroke="#6366F1" stroke-width="1.5"/>
+                        <path d="M310 80 L330 140" stroke="#6366F1" stroke-width="1.5"/>
+                        <path d="M340 80 L450 140" stroke="#6366F1" stroke-width="1.5"/>
+                        
+                        <!-- Agent connections -->
+                        <path d="M90 210 L160 260" stroke="#10B981" stroke-width="1" stroke-dasharray="3"/>
+                        <path d="M210 210 L260 260" stroke="#3B82F6" stroke-width="1" stroke-dasharray="3"/>
+                        <path d="M330 210 L360 260" stroke="#F59E0B" stroke-width="1" stroke-dasharray="3"/>
+                    </svg>
+                </div>
+                
+                <div class="arch-diagram" id="arch-flow">
+                    <h3>Agent Execution Flow (ReAct Pattern)</h3>
+                    <svg viewBox="0 0 600 280" width="100%">
+                        <rect fill="#F9FAFB" width="600" height="280" rx="8"/>
+                        
+                        <!-- Steps -->
+                        <rect x="20" y="40" width="100" height="60" rx="30" fill="#6366F1"/>
+                        <text x="70" y="65" text-anchor="middle" fill="white" font-size="10" font-weight="600">1. THOUGHT</text>
+                        <text x="70" y="82" text-anchor="middle" fill="#C7D2FE" font-size="8">Reasoning</text>
+                        
+                        <rect x="150" y="40" width="100" height="60" rx="30" fill="#10B981"/>
+                        <text x="200" y="65" text-anchor="middle" fill="white" font-size="10" font-weight="600">2. ACTION</text>
+                        <text x="200" y="82" text-anchor="middle" fill="#A7F3D0" font-size="8">Tool Call</text>
+                        
+                        <rect x="280" y="40" width="100" height="60" rx="30" fill="#F59E0B"/>
+                        <text x="330" y="65" text-anchor="middle" fill="white" font-size="10" font-weight="600">3. OBSERVE</text>
+                        <text x="330" y="82" text-anchor="middle" fill="#FEF3C7" font-size="8">Result</text>
+                        
+                        <rect x="410" y="40" width="100" height="60" rx="30" fill="#A855F7"/>
+                        <text x="460" y="65" text-anchor="middle" fill="white" font-size="10" font-weight="600">4. REFLECT</text>
+                        <text x="460" y="82" text-anchor="middle" fill="#E9D5FF" font-size="8">Evaluate</text>
+                        
+                        <!-- Loop -->
+                        <path d="M120 70 L150 70" stroke="#6366F1" stroke-width="2" marker-end="url(#arr)"/>
+                        <path d="M250 70 L280 70" stroke="#10B981" stroke-width="2" marker-end="url(#arr2)"/>
+                        <path d="M380 70 L410 70" stroke="#F59E0B" stroke-width="2" marker-end="url(#arr3)"/>
+                        
+                        <!-- Loop back arrow -->
+                        <path d="M460 100 L460 140 L70 140 L70 100" stroke="#A855F7" stroke-width="2" stroke-dasharray="5" marker-end="url(#arr4)"/>
+                        <text x="260" y="160" text-anchor="middle" fill="#6B7280" font-size="9">Repeat until complete</text>
+                        
+                        <!-- Final -->
+                        <rect x="250" y="200" width="120" height="50" rx="6" fill="#EF4444"/>
+                        <text x="310" y="222" text-anchor="middle" fill="white" font-size="11" font-weight="600">5. ANSWER</text>
+                        <text x="310" y="240" text-anchor="middle" fill="#FEE2E2" font-size="8">Final Response</text>
+                        
+                        <path d="M460 100 L460 180 L370 225" stroke="#EF4444" stroke-width="2" marker-end="url(#arr5)"/>
+                        
+                        <defs>
+                            <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#6366F1"/></marker>
+                            <marker id="arr2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#10B981"/></marker>
+                            <marker id="arr3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#F59E0B"/></marker>
+                            <marker id="arr4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#A855F7"/></marker>
+                            <marker id="arr5" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#EF4444"/></marker>
+                        </defs>
+                    </svg>
+                </div>
+            </section>
+            
+            <!-- Vector DBs -->
+            <section class="section">
+                <h2>🗄️ Vector Databases</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr><th>Database</th><th>Type</th><th>Context</th><th>Best For</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Pinecone</strong></td><td>Managed Cloud</td><td>Unlimited</td><td>Production RAG</td></tr>
+                        <tr><td><strong>Chroma</strong></td><td>Embedded</td><td>Local</td><td>Development</td></tr>
+                        <tr><td><strong>Weaviate</strong></td><td>Self-hosted</td><td>Configurable</td><td>Enterprise</td></tr>
+                        <tr><td><strong>Qdrant</strong></td><td>Self-hosted</td><td>Configurable</td><td>High Performance</td></tr>
+                        <tr><td><strong>Milvus</strong></td><td>Distributed</td><td>Billion+</td><td>Scale</td></tr>
+                        <tr><td><strong>MLX Embedding</strong></td><td>Local (Apple)</td><td>RAM limited</td><td>Mac/Privacy</td></tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <!-- Protocols -->
+            <section class="section">
+                <h2>🔌 Protocols & Standards</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr><th>Protocol</th><th>Purpose</th><th>Adoption</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>MCP</strong></td><td>Model Context Protocol - Tool standard</td><td>Claude, Anthropic</td></tr>
+                        <tr><td><strong>LSP</strong></td><td>Language Server - IDE intelligence</td><td>VS Code, Cursor</td></tr>
+                        <tr><td><strong>ACP</strong></td><td>Agent Communication Protocol</td><td>OpenClaw</td></tr>
+                        <tr><td><strong>OpenAI Functions</strong></td><td>Structured tool calling</td><td>Universal</td></tr>
+                        <tr><td><strong>Structured Output</strong></td><td>JSON schema responses</td><td>Universal</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p><a href="home.html">← Home</a> | <a href="design.html">Design →</a></p>
+    </footer>
+<script>if(sessionStorage.getItem("authenticated")!=="true")window.location.href="home.html";</script>
+</body>
+</html>

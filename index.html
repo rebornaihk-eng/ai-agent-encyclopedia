@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Encyclopedia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #6366F1 0%, #4F46E5 50%, #4338CA 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            background: white;
+            padding: 48px;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+        }
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 {
+            color: #1F2937;
+            margin-bottom: 8px;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #6B7280;
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        input {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #6366F1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366F1, #4F46E5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .error {
+            color: #EF4444;
+            font-size: 0.85rem;
+            margin-top: 16px;
+            display: none;
+            padding: 8px;
+            background: #FEE2E2;
+            border-radius: 8px;
+        }
+        .hint {
+            color: #9CA3AF;
+            font-size: 0.8rem;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #E5E7EB;
+        }
+        .hint code {
+            background: #F3F4F6;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #E5E7EB;
+        }
+        .feature {
+            text-align: center;
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        .feature-text {
+            font-size: 0.7rem;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">📚</div>
+        <h1>AI Agent Encyclopedia</h1>
+        <p class="subtitle">Your comprehensive guide to AI agents, frameworks, and tools</p>
+        
+        <input type="password" id="password" placeholder="🔑 Enter password" autofocus autocomplete="off">
+        <button onclick="checkPassword()">Access Encyclopedia</button>
+        
+        <p class="error" id="error">❌ Incorrect password. Please try again.</p>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">📖</div>
+                <div class="feature-text">21 Chapters</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💡</div>
+                <div class="feature-text">50+ Ideas</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📐</div>
+                <div class="feature-text">Architecture</div>
+            </div>
+        </div>
+        
+        <p class="hint">🔐 Private access | Password: <code>ai-agent-2025</code></p>
+    </div>
+    
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('password').value;
+            const correctPassword = 'ai-agent-2025';  // 🔐 Change this to your password
+            
+            if (password === correctPassword) {
+                sessionStorage.setItem('authenticated', 'true');
+                window.location.href = 'home.html';
+            } else {
+                const error = document.getElementById('error');
+                error.style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+                
+                // Shake animation
+                document.querySelector('.login-card').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.querySelector('.login-card').style.animation = '';
+                }, 500);
+            }
+        }
+        
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+        
+        // Check if already logged in
+        if (sessionStorage.getItem('authenticated') === 'true') {
+            window.location.href = 'home.html';
+        }
+    </script>
+    
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+    </style>
+</body>
+</html>

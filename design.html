@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design - AI Agent Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-50: #EEF2FF; --brand-100: #E0E7FF; --brand-500: #6366F1; --brand-600: #4F46E5; --brand-700: #4338CA;
+            --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB; --gray-400: #9CA3AF; --gray-500: #6B7280; --gray-600: #4B5563; --gray-700: #374151; --gray-800: #1F2937; --gray-900: #111827;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --radius-md: 8px; --radius-lg: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); background: var(--gray-50); color: var(--gray-800); line-height: 1.6; }
+        
+        .nav { background: white; border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.25rem; color: var(--gray-900); text-decoration: none; }
+        .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #A855F7, #7C3AED); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; }
+        .nav-links { display: flex; gap: 4px; }
+        .nav-link { padding: 8px 16px; border-radius: 8px; color: var(--gray-600); text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+        .nav-link:hover { background: var(--gray-100); }
+        .nav-link.active { background: #F3E8FF; color: #7C3AED; }
+        
+        .page-header { background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%); color: white; padding: 48px 24px; text-align: center; }
+        .page-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: 220px 1fr; gap: 32px; }
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .sidebar { display: none; } }
+        
+        .sidebar { position: sticky; top: 96px; align-self: start; }
+        .sidebar-section { margin-bottom: 24px; }
+        .sidebar-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-400); margin-bottom: 8px; }
+        .sidebar-link { display: block; padding: 6px 12px; color: var(--gray-600); text-decoration: none; font-size: 0.875rem; border-radius: 6px; }
+        .sidebar-link:hover { background: var(--gray-100); }
+        
+        .section { margin-bottom: 48px; }
+        .section h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #A855F7; display: inline-block; }
+        .section p { color: var(--gray-500); margin-bottom: 20px; }
+        
+        .pattern-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+        
+        .pattern-card { background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); border-left: 4px solid #A855F7; }
+        .pattern-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+        .pattern-card p { font-size: 0.85rem; color: var(--gray-600); margin-bottom: 12px; }
+        .pattern-card pre { background: var(--gray-50); padding: 12px; border-radius: 6px; font-size: 0.7rem; font-family: var(--font-mono); overflow-x: auto; white-space: pre; }
+        
+        .arch-diagram { background: white; border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--gray-200); margin-bottom: 20px; }
+        .arch-diagram h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--gray-800); }
+        .arch-diagram .diagram-container { display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; }
+        .arch-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .arch-box { padding: 12px 16px; border-radius: 8px; font-weight: 500; text-align: center; min-width: 100px; }
+        .arch-arrow { color: var(--gray-400); font-size: 1.2rem; }
+        .arch-label { font-size: 0.75rem; color: var(--gray-500); margin-left: 4px; }
+        
+        .code-template { background: var(--gray-900); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 20px; }
+        .code-header { background: var(--gray-800); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .code-header span { color: var(--gray-400); font-size: 0.8rem; font-family: var(--font-mono); }
+        .code-content { padding: 16px; overflow-x: auto; }
+        .code-content pre { color: #10B981; font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.5; margin: 0; }
+        .code-content .comment { color: var(--gray-500); }
+        .code-content .keyword { color: #F472B6; }
+        .code-content .string { color: #FCD34D; }
+        .code-content .func { color: #60A5FA; }
+        
+        .comparison-table { width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius-lg); overflow: hidden; font-size: 0.85rem; }
+        .comparison-table th { text-align: left; padding: 12px; background: var(--gray-50); border-bottom: 2px solid var(--gray-200); font-weight: 600; }
+        .comparison-table td { padding: 12px; border-bottom: 1px solid var(--gray-100); }
+        .comparison-table tr:hover { background: var(--gray-50); }
+        
+        .footer { background: var(--gray-900); color: white; padding: 32px 24px; margin-top: 64px; text-align: center; font-size: 0.875rem; }
+        .footer a { color: var(--gray-400); text-decoration: none; }
+        .footer a:hover { color: white; }
+        
+        /* Flow diagram styles */
+        .flow-diagram { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
+        .flow-row { display: flex; align-items: center; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .flow-node { padding: 10px 16px; border-radius: 8px; font-weight: 500; font-size: 0.8rem; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .flow-node.large { padding: 16px 24px; font-size: 0.9rem; }
+        .flow-arrow::before { content: "→"; font-size: 1.5rem; color: #6366F1; font-weight: bold; }
+        .flow-down { font-size: 1.2rem; color: #6366F1; text-align: center; padding: 4px 0; }
+        .flow-down::before { content: "▼"; }
+        .flow-connector { width: 40px; height: 2px; background: #E5E7EB; }
+        
+        .node-blue { background: #3B82F6; color: white; }
+        .node-green { background: #10B981; color: white; }
+        .node-purple { background: #8B5CF6; color: white; }
+        .node-orange { background: #F97316; color: white; }
+        .node-pink { background: #EC4899; color: white; }
+        .node-teal { background: #14B8A6; color: white; }
+        .node-red { background: #EF4444; color: white; }
+        .node-amber { background: #F59E0B; color: white; }
+        .node-gray { background: #6B7280; color: white; }
+        .node-outline { background: white; border: 2px solid #6366F1; color: #6366F1; }
+        .node-amber { background: #F59E0B; color: white; }
+        .node-teal { background: #14B8A6; color: white; }
+        .node-green { background: #10B981; color: white; }
+        
+        .source-link { font-size: 0.75rem; color: var(--gray-500); margin-top: 8px; }
+        .source-link a { color: #6366F1; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="home.html" class="logo">
+                <div class="logo-icon">🎨</div>
+                AI Agent Encyclopedia
+            </a>
+            <div class="nav-links">
+                <a href="reference.html" class="nav-link">Reference</a>
+                <a href="design.html" class="nav-link active">Design</a>
+                <a href="innovate.html" class="nav-link">Innovate</a>
+                <a href="build.html" class="nav-link">Build</a>
+                <a href="learn.html" class="nav-link">Learn</a>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="page-header">
+        <h1>🎨 Design Patterns</h1>
+        <p>Architecture patterns, code templates, and decision guides for building AI agents</p>
+    </header>
+    
+    <main class="container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Patterns</div>
+                <a href="#react" class="sidebar-link">ReAct</a>
+                <a href="#cot" class="sidebar-link">Chain-of-Thought</a>
+                <a href="#multi" class="sidebar-link">Multi-Agent</a>
+                <a href="#hierarchical" class="sidebar-link">Hierarchical</a>
+                <a href="#hitl" class="sidebar-link">Human-in-Loop</a>
+                <a href="#rag" class="sidebar-link">RAG + Agent</a>
+                <a href="#tool" class="sidebar-link">Tool-Using</a>
+                <a href="#memory" class="sidebar-link">Memory</a>
+                <a href="#reflect" class="sidebar-link">Self-Reflect</a>
+                <a href="#planner" class="sidebar-link">Planner-Executor</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Architecture</div>
+                <a href="#arch-rag" class="sidebar-link">RAG Pipeline</a>
+                <a href="#arch-react" class="sidebar-link">ReAct Loop</a>
+                <a href="#arch-multi" class="sidebar-link">Multi-Agent</a>
+                <a href="#arch-graph" class="sidebar-link">LangGraph</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Templates</div>
+                <a href="#template-langchain" class="sidebar-link">LangChain RAG</a>
+                <a href="#template-crew" class="sidebar-link">CrewAI Team</a>
+                <a href="#template-graph" class="sidebar-link">LangGraph Flow</a>
+            </div>
+        </aside>
+        
+        <div class="content">
+            <!-- Design Patterns -->
+            <section class="section" id="patterns">
+                <h2>🧩 10 Design Patterns</h2>
+                <p>Proven patterns for building AI agents</p>
+                
+                <div class="pattern-grid">
+                    <div class="pattern-card" id="react">
+                        <h3>🔄 ReAct (Reason + Act)</h3>
+                        <p>The foundational pattern: Think → Act → Observe → Repeat. Agent reasons step-by-step.</p>
+                        <pre>Thought: I need weather info
+Action: search("weather HK")
+Observation: 25°C, sunny
+Thought: I have the answer
+Answer: It's 25°C and sunny</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="cot">
+                        <h3>🔗 Chain-of-Thought</h3>
+                        <p>Break complex problems into reasoning steps before answering. Improves accuracy.</p>
+                        <pre>Step 1: Understand the problem
+Step 2: Identify key information
+Step 3: Apply relevant knowledge
+Step 4: Verify the answer
+Final: Answer with confidence</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="multi">
+                        <h3>👥 Multi-Agent Collaboration</h3>
+                        <p>Multiple specialized agents work together. Each has a role, goal, and backstory.</p>
+                        <pre>Researcher → finds information
+Writer → creates content
+Editor → reviews quality
+Reviewer → final approval</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="hierarchical">
+                        <h3>📊 Hierarchical Agent</h3>
+                        <p>Manager delegates to workers. Good for complex projects requiring coordination.</p>
+                        <pre>Manager Agent
+├── Worker 1 (Research)
+├── Worker 2 (Development)
+├── Worker 3 (Testing)
+└── Worker 4 (Documentation)</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="hitl">
+                        <h3>👤 Human-in-the-Loop</h3>
+                        <p>Agent pauses for human approval before critical actions. Ensures safety.</p>
+                        <pre>Agent: "I found 3 options"
+Agent: "Which should I use?"
+Human: "Option 2"
+Agent: "Proceeding with Option 2"</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="rag">
+                        <h3>📚 RAG + Agent Hybrid</h3>
+                        <p>Combine retrieval with agent reasoning. Best for knowledge-intensive tasks.</p>
+                        <pre>Query → Retrieve docs → 
+Agent reasons over docs → 
+Generate answer with citations</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="tool">
+                        <h3>🔧 Tool-Using Agent</h3>
+                        <p>Agent has access to tools (APIs, databases, calculators) and decides when to use them.</p>
+                        <pre>Agent: "I need to calculate"
+Tool: calculator(123 * 456)
+Result: 56088
+Agent: Uses result in answer</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="memory">
+                        <h3>🧠 Memory-Augmented</h3>
+                        <p>Agent maintains conversation history, preferences, and learned facts across sessions.</p>
+                        <pre>Short-term: Recent messages
+Long-term: User preferences
+Entity: Facts about people
+Episodic: Past interactions</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="reflect">
+                        <h3>🔍 Self-Reflecting</h3>
+                        <p>Agent reviews its own output, identifies errors, and improves before responding.</p>
+                        <pre>Generate draft →
+Critique own work →
+Identify weaknesses →
+Revise and improve →
+Final output</pre>
+                    </div>
+                    
+                    <div class="pattern-card" id="planner">
+                        <h3>📋 Planner-Executor</h3>
+                        <p>Separate planning (what to do) from execution (how to do it).</p>
+                        <pre>Planner:
+1. Research topic
+2. Write outline
+3. Draft content
+4. Review
+
+Executor: Execute each step</pre>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Architecture Diagrams -->
+            <section class="section" id="architecture">
+                <h2>📐 Architecture Diagrams</h2>
+                <p>Visual representations of key agent architectures</p>
+                
+                <!-- RAG Pipeline -->
+                <div class="arch-diagram" id="arch-rag">
+                    <h3>🔄 RAG Pipeline (Retrieval-Augmented Generation)</h3>
+                    <div class="source-link">Source: <a href="https://docs.llamaindex.ai/en/stable/getting_started/concepts/" target="_blank">LlamaIndex Docs</a></div>
+                    
+                    <div class="flow-diagram">
+                        <!-- Ingestion Flow -->
+                        <div class="flow-row">
+                            <div class="flow-node large node-red">📄 Documents</div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        <div class="flow-row">
+                            <div class="flow-node node-amber">Split into Chunks</div>
+                            <span class="flow-arrow"></span>
+                            <div class="flow-node node-green">Create Embeddings</div>
+                            <span class="flow-arrow"></span>
+                            <div class="flow-node large node-blue">🗄️ Vector Database</div>
+                        </div>
+                        
+                        <div style="text-align: center; color: #6B7280; font-size: 0.75rem; margin: 16px 0;">─── Query Time ───</div>
+                        
+                        <!-- Query Flow -->
+                        <div class="flow-row">
+                            <div class="flow-node large node-purple">❓ User Query</div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        <div class="flow-row">
+                            <div class="flow-node node-green">Embed Query</div>
+                            <span class="flow-arrow"></span>
+                            <div class="flow-node node-blue">Vector Search</div>
+                            <span class="flow-arrow"></span>
+                            <div class="flow-node node-teal">Relevant Chunks</div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        <div class="flow-row">
+                            <div class="flow-node node-pink">Context + Query</div>
+                            <span class="flow-arrow"></span>
+                            <div class="flow-node large node-orange">🤖 LLM</div>
+                            <span class="flow-arrow"></span>
+                            <div class="flow-node large node-green">✅ Response</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ReAct Loop -->
+                <div class="arch-diagram" id="arch-react">
+                    <h3>🔁 ReAct Loop (Reason + Act)</h3>
+                    <div class="source-link">Source: <a href="https://arxiv.org/abs/2210.03629" target="_blank">ReAct Paper (Yao et al., 2022)</a></div>
+                    
+                    <div class="flow-diagram">
+                        <div class="flow-row">
+                            <div class="flow-node large node-blue">👤 User Input</div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <!-- The Loop -->
+                        <div style="border: 2px dashed #6366F1; border-radius: 12px; padding: 20px; margin: 8px 0;">
+                            <div class="flow-row">
+                                <div class="flow-node large node-purple">💭 Thought</div>
+                            </div>
+                            <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">"I need to search for X"</div>
+                            <div class="flow-row"><span class="flow-down"></span></div>
+                            
+                            <div class="flow-row">
+                                <div class="flow-node large node-amber">⚡ Action</div>
+                            </div>
+                            <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">Tool call: search("X")</div>
+                            <div class="flow-row"><span class="flow-down"></span></div>
+                            
+                            <div class="flow-row">
+                                <div class="flow-node large node-teal">👁️ Observation</div>
+                            </div>
+                            <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">Result: "Found data..."</div>
+                            <div class="flow-row"><span class="flow-down"></span></div>
+                            
+                            <div class="flow-row">
+                                <div class="flow-node node-outline">Complete?</div>
+                                <span style="font-size: 0.8rem; color: #6B7280;">No → Loop back</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-row"><span class="flow-down"></span> <span style="font-size:0.8rem;color:#6B7280">Yes</span></div>
+                        <div class="flow-row">
+                            <div class="flow-node large node-green">📤 Final Answer</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Multi-Agent -->
+                <div class="arch-diagram" id="arch-multi">
+                    <h3>👥 CrewAI Multi-Agent (Hierarchical Process)</h3>
+                    <div class="source-link">Source: <a href="https://docs.crewai.com/concepts/processes" target="_blank">CrewAI Docs</a></div>
+                    
+                    <div class="flow-diagram">
+                        <div class="flow-row">
+                            <div class="flow-node large node-blue">👤 User Request</div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <div class="flow-row">
+                            <div class="flow-node large node-purple" style="min-width: 150px;">🎯 Orchestrator</div>
+                        </div>
+                        <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">Routes & delegates tasks</div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <!-- Agents Row -->
+                        <div class="flow-row" style="gap: 16px;">
+                            <div style="text-align: center;">
+                                <div class="flow-node node-green">🔍 Researcher</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Web + Docs</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-amber">📊 Analyst</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Process Data</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-pink">✍️ Writer</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Compose</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-red">✅ Reviewer</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Quality Check</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <!-- Shared Memory -->
+                        <div class="flow-row">
+                            <div class="flow-node large node-outline" style="min-width: 200px;">🧠 Shared Memory & State</div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <div class="flow-row">
+                            <div class="flow-node large node-green">📤 Final Output</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- LangGraph State Machine -->
+                <div class="arch-diagram" id="arch-graph">
+                    <h3>🔄 LangGraph StateGraph</h3>
+                    <div class="source-link">Source: <a href="https://github.com/langchain-ai/langgraph" target="_blank">LangGraph GitHub</a></div>
+                    
+                    <div class="flow-diagram">
+                        <div class="flow-row">
+                            <div class="flow-node node-green">START</div>
+                            <span class="flow-arrow"></span>
+                            <div class="flow-node large node-purple">📝 State</div>
+                        </div>
+                        <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">TypedDict with messages, next action</div>
+                        
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <!-- Nodes -->
+                        <div class="flow-row" style="gap: 24px;">
+                            <div style="text-align: center;">
+                                <div class="flow-node node-blue">Node A</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Function</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-amber">Node B</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Function</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-pink">Node C</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Function</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <div class="flow-row">
+                            <div class="flow-node large node-outline">Conditional Edges</div>
+                        </div>
+                        <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">Route based on state</div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <div class="flow-row">
+                            <div class="flow-node node-red">END</div>
+                        </div>
+                        
+                        <div style="margin-top: 16px; padding: 12px; background: #F3F4F6; border-radius: 8px; font-size: 0.75rem;">
+                            <strong>Key Concepts:</strong><br/>
+                            • <strong>StateGraph</strong> - Graph with typed state<br/>
+                            • <strong>Nodes</strong> - Functions that process state<br/>
+                            • <strong>Edges</strong> - Normal or conditional transitions<br/>
+                            • <strong>Checkpointer</strong> - Persist state for resume
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AutoGen Architecture -->
+                <div class="arch-diagram" id="arch-autogen">
+                    <h3>💬 AutoGen Conversational Multi-Agent</h3>
+                    <div class="source-link">Source: <a href="https://microsoft.github.io/autogen/" target="_blank">AutoGen Docs</a></div>
+                    
+                    <div class="flow-diagram">
+                        <div class="flow-row">
+                            <div class="flow-node large node-blue">👤 UserProxyAgent</div>
+                        </div>
+                        <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">Executes code, provides feedback</div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <!-- Conversation Loop -->
+                        <div style="border: 2px dashed #6366F1; border-radius: 12px; padding: 16px; margin: 8px 0;">
+                            <div class="flow-row">
+                                <div class="flow-node large node-purple">🤖 AssistantAgent</div>
+                            </div>
+                            <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">Generates code, suggestions</div>
+                            <div class="flow-row"><span class="flow-down"></span></div>
+                            
+                            <div class="flow-row">
+                                <div class="flow-node node-amber">💬 Message</div>
+                                <span class="flow-arrow"></span>
+                                <div class="flow-node node-green">📝 Code</div>
+                                <span class="flow-arrow"></span>
+                                <div class="flow-node node-teal">✅ Result</div>
+                            </div>
+                            <div class="flow-row"><span class="flow-down"></span></div>
+                            
+                            <div class="flow-row">
+                                <div class="flow-node node-outline">Task Complete?</div>
+                                <span style="font-size: 0.8rem; color: #6B7280;">No → Continue</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <div class="flow-row">
+                            <div class="flow-node large node-green">📤 Final Solution</div>
+                        </div>
+                        
+                        <div style="margin-top: 12px; padding: 10px; background: #F3F4F6; border-radius: 8px; font-size: 0.7rem;">
+                            <strong>Key Features:</strong> Conversational | Code Execution | Human-in-Loop | GroupChat
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- OpenClaw Architecture -->
+                <div class="arch-diagram" id="arch-openclaw">
+                    <h3>🏠 OpenClaw Platform Architecture</h3>
+                    <div class="source-link">Source: <a href="https://github.com/openclaw/openclaw" target="_blank">OpenClaw GitHub</a></div>
+                    
+                    <div class="flow-diagram">
+                        <!-- Channels -->
+                        <div class="flow-row" style="gap: 12px;">
+                            <div class="flow-node node-blue">📱 Telegram</div>
+                            <div class="flow-node node-purple">💬 Discord</div>
+                            <div class="flow-node node-green">📱 WhatsApp</div>
+                            <div class="flow-node node-amber">💬 Signal</div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <!-- Gateway -->
+                        <div class="flow-row">
+                            <div class="flow-node large node-orange" style="min-width: 200px;">🚪 Gateway (Go + TS)</div>
+                        </div>
+                        <div class="flow-row" style="font-size: 0.7rem; color: #6B7280;">Routes messages, manages sessions</div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <!-- Core -->
+                        <div class="flow-row" style="gap: 16px;">
+                            <div style="text-align: center;">
+                                <div class="flow-node node-pink">🧠 LLM</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Multi-provider</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-teal">📝 Memory</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">MLX Embedding</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-green">🎤 Voice</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">Whisper + TTS</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="flow-node node-amber">🛠️ Skills</div>
+                                <div style="font-size: 0.65rem; color: #6B7280; margin-top: 4px;">ClawHub</div>
+                            </div>
+                        </div>
+                        <div class="flow-row"><span class="flow-down"></span></div>
+                        
+                        <div class="flow-row">
+                            <div class="flow-node large node-green">📤 Response</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Code Templates -->
+            <section class="section" id="templates">
+                <h2>📝 Code Templates</h2>
+                
+                <div id="template-langchain">
+                    <div class="code-template">
+                        <div class="code-header">
+                            <span>langchain_rag.py</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># LangChain RAG Template</span>
+<span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI, OpenAIEmbeddings
+<span class="keyword">from</span> langchain_community.vectorstores <span class="keyword">import</span> Chroma
+<span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA
+<span class="keyword">from</span> langchain_community.document_loaders <span class="keyword">import</span> PyPDFLoader
+
+<span class="comment"># 1. Load documents</span>
+loader = <span class="func">PyPDFLoader</span>(<span class="string">"docs.pdf"</span>)
+docs = loader.<span class="func">load</span>()
+
+<span class="comment"># 2. Create vector store</span>
+embeddings = <span class="func">OpenAIEmbeddings</span>()
+db = Chroma.<span class="func">from_documents</span>(docs, embeddings)
+
+<span class="comment"># 3. Create RAG chain</span>
+llm = <span class="func">ChatOpenAI</span>(model=<span class="string">"gpt-4o"</span>)
+qa = <span class="func">RetrievalQA.from_chain_type</span>(
+    llm,
+    retriever=db.<span class="func">as_retriever</span>(k=<span class="string">4</span>)
+)
+
+<span class="comment"># 4. Query</span>
+result = qa.<span class="func">invoke</span>({<span class="string">"query"</span>: <span class="string">"What is the main topic?"</span>})</pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="template-crew">
+                    <div class="code-template">
+                        <div class="code-header">
+                            <span>crewai_team.py</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># CrewAI Multi-Agent Template</span>
+<span class="keyword">from</span> crewai <span class="keyword">import</span> Agent, Task, Crew, Process
+
+<span class="comment"># Define agents</span>
+researcher = <span class="func">Agent</span>(
+    role=<span class="string">"Researcher"</span>,
+    goal=<span class="string">"Find comprehensive information"</span>,
+    backstory=<span class="string">"Expert at finding and synthesizing data"</span>
+)
+
+writer = <span class="func">Agent</span>(
+    role=<span class="string">"Writer"</span>,
+    goal=<span class="string">"Create engaging content"</span>,
+    backstory=<span class="string">"Award-winning technical writer"</span>
+)
+
+<span class="comment"># Define tasks</span>
+research = <span class="func">Task</span>(
+    description=<span class="string">"Research AI agents"</span>,
+    agent=researcher
+)
+
+article = <span class="func">Task</span>(
+    description=<span class="string">"Write article"</span>,
+    agent=writer,
+    context=[research]
+)
+
+<span class="comment"># Run crew</span>
+crew = <span class="func">Crew</span>(agents=[researcher, writer], tasks=[research, article])
+result = crew.<span class="func">kickoff</span>()</pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="template-graph">
+                    <div class="code-template">
+                        <div class="code-header">
+                            <span>langgraph_flow.py</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># LangGraph State Machine Template</span>
+<span class="keyword">from</span> langgraph.graph <span class="keyword">import</span> StateGraph, END
+<span class="keyword">from</span> typing <span class="keyword">import</span> TypedDict
+
+<span class="keyword">class</span> <span class="func">State</span>(TypedDict):
+    messages: list
+    next: str
+
+<span class="keyword">def</span> <span class="func">router</span>(state: State) -> str:
+    <span class="keyword">return</span> <span class="string">"tool_agent"</span>
+
+<span class="keyword">def</span> <span class="func">tool_agent</span>(state: State) -> State:
+    <span class="keyword">return</span> {<span class="string">"messages"</span>: [<span class="string">"Result"</span>]}
+
+<span class="comment"># Build graph</span>
+graph = <span class="func">StateGraph</span>(State)
+graph.<span class="func">add_node</span>(<span class="string">"router"</span>, router)
+graph.<span class="func">add_node</span>(<span class="string">"tool_agent"</span>, tool_agent)
+
+graph.<span class="func">set_entry_point</span>(<span class="string">"router"</span>)
+graph.<span class="func">add_conditional_edges</span>(<span class="string">"router"</span>, router, {
+    <span class="string">"tool_agent"</span>: <span class="string">"tool_agent"</span>
+})
+graph.<span class="func">add_edge</span>(<span class="string">"tool_agent"</span>, END)
+
+app = graph.<span class="func">compile</span>()</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Decision Guide -->
+            <section class="section">
+                <h2>🎯 Decision Guide</h2>
+                <p>Which framework should I use?</p>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr><th>Need</th><th>Best Framework</th><th>Why</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Quick Prototype</strong></td><td>LangChain</td><td>Most examples, fast to start</td></tr>
+                        <tr><td><strong>Complex Workflows</strong></td><td>LangGraph</td><td>Cycles, state, persistence</td></tr>
+                        <tr><td><strong>Team Simulation</strong></td><td>CrewAI</td><td>Role-based agents, collaboration</td></tr>
+                        <tr><td><strong>Research Tasks</strong></td><td>AutoGen</td><td>Conversational, code exec</td></tr>
+                        <tr><td><strong>Document Q&A</strong></td><td>LlamaIndex</td><td>Best RAG tooling</td></tr>
+                        <tr><td><strong>Enterprise .NET</strong></td><td>Semantic Kernel</td><td>Azure integration</td></tr>
+                        <tr><td><strong>Self-Hosted Platform</strong></td><td>OpenClaw</td><td>Multi-channel, MLX support</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p><a href="reference.html">← Reference</a> | <a href="innovate.html">Innovate →</a></p>
+    </footer>
+<script>if(sessionStorage.getItem("authenticated")!=="true")window.location.href="home.html";</script>
+</body>
+</html>

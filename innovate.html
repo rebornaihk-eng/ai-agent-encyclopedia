@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovate - AI Agent Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-50: #EEF2FF; --brand-100: #E0E7FF; --brand-500: #6366F1; --brand-600: #4F46E5; --brand-700: #4338CA;
+            --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB; --gray-400: #9CA3AF; --gray-500: #6B7280; --gray-600: #4B5563; --gray-700: #374151; --gray-800: #1F2937; --gray-900: #111827;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); background: var(--gray-50); color: var(--gray-800); line-height: 1.6; }
+        
+        .nav { background: white; border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.25rem; color: var(--gray-900); text-decoration: none; }
+        .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #10B981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; }
+        .nav-links { display: flex; gap: 4px; }
+        .nav-link { padding: 8px 16px; border-radius: 8px; color: var(--gray-600); text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+        .nav-link:hover { background: var(--gray-100); }
+        .nav-link.active { background: #D1FAE5; color: #059669; }
+        
+        .page-header { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 48px 24px; text-align: center; }
+        .page-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+        
+        .tabs { display: flex; gap: 8px; margin-bottom: 32px; border-bottom: 1px solid var(--gray-200); padding-bottom: 16px; overflow-x: auto; }
+        .tab { padding: 10px 20px; border: none; background: none; font-size: 0.9rem; font-weight: 500; color: var(--gray-500); cursor: pointer; border-radius: var(--radius-md); transition: all 0.15s; white-space: nowrap; }
+        .tab:hover { background: var(--gray-100); }
+        .tab.active { background: var(--brand-500); color: white; }
+        
+        .section { margin-bottom: 48px; }
+        .section h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+        .section p { color: var(--gray-500); margin-bottom: 24px; }
+        
+        .idea-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        
+        .idea-card { background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); transition: all 0.2s; }
+        .idea-card:hover { border-color: var(--brand-300); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        
+        .idea-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+        .idea-title { font-size: 1rem; font-weight: 600; }
+        .idea-number { background: var(--gray-100); padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; color: var(--gray-500); }
+        
+        .idea-desc { font-size: 0.85rem; color: var(--gray-600); margin-bottom: 12px; }
+        .idea-stack { font-size: 0.8rem; color: var(--gray-500); margin-bottom: 8px; }
+        .idea-stack strong { color: var(--gray-700); }
+        
+        .difficulty { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 500; }
+        .diff-easy { background: #DCFCE7; color: #166534; }
+        .diff-medium { background: #FEF3C7; color: #92400E; }
+        .diff-hard { background: #FEE2E2; color: #991B1B; }
+        
+        .category-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--brand-600); margin-bottom: 4px; }
+        
+        .success-card { background: white; border-radius: var(--radius-lg); padding: 24px; border: 1px solid var(--gray-200); display: flex; gap: 20px; align-items: flex-start; margin-bottom: 16px; }
+        .success-icon { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, var(--brand-500), var(--brand-700)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        .success-content h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+        .success-content p { font-size: 0.85rem; color: var(--gray-600); }
+        .success-meta { font-size: 0.8rem; color: var(--gray-500); margin-top: 8px; }
+        
+        .trend-card { background: white; border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gray-200); margin-bottom: 12px; }
+        .trend-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .trend-card p { font-size: 0.85rem; color: var(--gray-600); }
+        
+        .footer { background: var(--gray-900); color: white; padding: 32px 24px; margin-top: 64px; text-align: center; font-size: 0.875rem; }
+        .footer a { color: var(--gray-400); text-decoration: none; }
+        .footer a:hover { color: white; }
+        
+        @media (max-width: 768px) { .nav-links { display: none; } .success-card { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="home.html" class="logo">
+                <div class="logo-icon">💡</div>
+                AI Agent Encyclopedia
+            </a>
+            <div class="nav-links">
+                <a href="reference.html" class="nav-link">Reference</a>
+                <a href="design.html" class="nav-link">Design</a>
+                <a href="innovate.html" class="nav-link active">Innovate</a>
+                <a href="build.html" class="nav-link">Build</a>
+                <a href="learn.html" class="nav-link">Learn</a>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="page-header">
+        <h1>💡 Innovate</h1>
+        <p>50+ project ideas, use cases, and success stories to inspire your next AI agent</p>
+    </header>
+    
+    <main class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('ideas')">📋 Project Ideas</button>
+            <button class="tab" onclick="showSection('usecases')">🎯 Use Cases</button>
+            <button class="tab" onclick="showSection('success')">⭐ Success Stories</button>
+            <button class="tab" onclick="showSection('trends')">🔮 Future Trends</button>
+        </div>
+        
+        <!-- Project Ideas -->
+        <div id="ideas-section" class="section">
+            <h2>🟢 Beginner Projects (1-2 days)</h2>
+            <p>Quick wins to get started with AI agents</p>
+            
+            <div class="idea-grid">
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">📄 FAQ Chatbot</span>
+                        <span class="idea-number">#1</span>
+                    </div>
+                    <p class="idea-desc">RAG bot that answers questions from your documentation.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> LangChain + Chroma + OpenAI</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">📧 Email Summarizer</span>
+                        <span class="idea-number">#2</span>
+                    </div>
+                    <p class="idea-desc">Reads emails and generates daily summary.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> Claude Code + IMAP</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🎬 YouTube Summarizer</span>
+                        <span class="idea-number">#3</span>
+                    </div>
+                    <p class="idea-desc">Extract transcript and summarize any video.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> LangChain + YouTube API</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">📝 Personal Journal Bot</span>
+                        <span class="idea-number">#4</span>
+                    </div>
+                    <p class="idea-desc">Daily journaling bot with mood tracking.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> OpenClaw + Telegram</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">💻 Code Explainer</span>
+                        <span class="idea-number">#5</span>
+                    </div>
+                    <p class="idea-desc">Paste code, get detailed explanation with comments.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> Claude Code CLI</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🍳 Recipe Generator</span>
+                        <span class="idea-number">#6</span>
+                    </div>
+                    <p class="idea-desc">Generate recipes from available ingredients.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> LangChain + OpenAI</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🎤 Meeting Notes Bot</span>
+                        <span class="idea-number">#7</span>
+                    </div>
+                    <p class="idea-desc">Transcribe and summarize meetings.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> OpenClaw + Whisper</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">📚 Book Recommender</span>
+                        <span class="idea-number">#8</span>
+                    </div>
+                    <p class="idea-desc">Personalized recommendations based on reading history.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> RAG + Goodreads API</p>
+                    <span class="difficulty diff-easy">Easy (1-2 days)</span>
+                </div>
+            </div>
+            
+            <h2 style="margin-top: 48px;">🟡 Intermediate Projects (1-2 weeks)</h2>
+            <p>More complex agents with multiple components</p>
+            
+            <div class="idea-grid">
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🔬 Research Paper Assistant</span>
+                        <span class="idea-number">#9</span>
+                    </div>
+                    <p class="idea-desc">Search, summarize, and Q&A on research papers.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> LangChain + ArXiv + Pinecone</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">💰 Personal Finance Tracker</span>
+                        <span class="idea-number">#10</span>
+                    </div>
+                    <p class="idea-desc">Categorize expenses, generate insights, predict spending.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> CrewAI + Bank API + Plaid</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">💼 Job Application Bot</span>
+                        <span class="idea-number">#11</span>
+                    </div>
+                    <p class="idea-desc">Auto-apply to jobs matching your profile.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> AutoGPT + LinkedIn + GPT-4</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🎧 Customer Support Bot</span>
+                        <span class="idea-number">#12</span>
+                    </div>
+                    <p class="idea-desc">Multi-turn support with escalation logic.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> LangGraph + Zendesk + KB</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🎓 Learning Path Generator</span>
+                        <span class="idea-number">#13</span>
+                    </div>
+                    <p class="idea-desc">Generate personalized curriculum for any topic.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> CrewAI + Course APIs</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🔍 Code Review Bot</span>
+                        <span class="idea-number">#14</span>
+                    </div>
+                    <p class="idea-desc">Auto-review PRs with detailed feedback.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> Claude Code + GitHub API</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">✈️ Travel Planner</span>
+                        <span class="idea-number">#15</span>
+                    </div>
+                    <p class="idea-desc">Multi-agent trip planning with itinerary generation.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> CrewAI + Maps + Booking APIs</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">📱 Social Media Manager</span>
+                        <span class="idea-number">#16</span>
+                    </div>
+                    <p class="idea-desc">Generate and schedule posts, analyze engagement.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> LangChain + Twitter/LinkedIn API</p>
+                    <span class="difficulty diff-medium">Medium (1-2 weeks)</span>
+                </div>
+            </div>
+            
+            <h2 style="margin-top: 48px;">🔴 Advanced Projects (1 month+)</h2>
+            <p>Complex multi-agent systems and platforms</p>
+            
+            <div class="idea-grid">
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">📈 Autonomous Trading Agent</span>
+                        <span class="idea-number">#21</span>
+                    </div>
+                    <p class="idea-desc">Research, analyze, and execute trades autonomously.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> AutoGPT + Trading APIs + Risk Models</p>
+                    <span class="difficulty diff-hard">Hard (1 month+)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🎮 AI Game Master</span>
+                        <span class="idea-number">#22</span>
+                    </div>
+                    <p class="idea-desc">Dynamic NPC interactions, story generation, quest creation.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> LangGraph + Game Engine</p>
+                    <span class="difficulty diff-hard">Hard (1 month+)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🚀 Startup Idea Validator</span>
+                        <span class="idea-number">#23</span>
+                    </div>
+                    <p class="idea-desc">Research market, competition, generate validation report.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> CrewAI + Web Scraping + Analysis</p>
+                    <span class="difficulty diff-hard">Hard (1 month+)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🔬 Autonomous Researcher</span>
+                        <span class="idea-number">#24</span>
+                    </div>
+                    <p class="idea-desc">Conduct full research projects with citations.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> AutoGPT + Playwright + APIs</p>
+                    <span class="difficulty diff-hard">Hard (1 month+)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">💻 AI Pair Programming IDE</span>
+                        <span class="idea-number">#25</span>
+                    </div>
+                    <p class="idea-desc">Build your own AI-powered code editor.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> Cursor-like fork + Custom Agent</p>
+                    <span class="difficulty diff-hard">Hard (1 month+)</span>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="idea-header">
+                        <span class="idea-title">🎨 Multi-Modal Content Creator</span>
+                        <span class="idea-number">#26</span>
+                    </div>
+                    <p class="idea-desc">Generate blog + images + video from single prompt.</p>
+                    <p class="idea-stack"><strong>Stack:</strong> CrewAI + DALL-E + Video APIs</p>
+                    <span class="difficulty diff-hard">Hard (1 month+)</span>
+                </div>
+            </div>
+            
+            <h2 style="margin-top: 48px;">📁 More Ideas by Category</h2>
+            
+            <div class="idea-grid">
+                <div class="idea-card">
+                    <div class="category-label">Personal Assistants</div>
+                    <ul style="font-size: 0.85rem; color: var(--gray-600); padding-left: 16px;">
+                        <li>Daily planner with calendar</li>
+                        <li>Habit tracker with AI coaching</li>
+                        <li>Gift recommendation engine</li>
+                        <li>Context-aware reminder bot</li>
+                        <li>Personal CRM</li>
+                    </ul>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="category-label">Business Automation</div>
+                    <ul style="font-size: 0.85rem; color: var(--gray-600); padding-left: 16px;">
+                        <li>Invoice processing</li>
+                        <li>Competitor monitoring</li>
+                        <li>Customer feedback analyzer</li>
+                        <li>Meeting scheduler</li>
+                        <li>Automated reports</li>
+                    </ul>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="category-label">Development Tools</div>
+                    <ul style="font-size: 0.85rem; color: var(--gray-600); padding-left: 16px;">
+                        <li>API documentation generator</li>
+                        <li>Test case generator</li>
+                        <li>Code migration assistant</li>
+                        <li>Vulnerability scanner</li>
+                        <li>Schema designer</li>
+                    </ul>
+                </div>
+                
+                <div class="idea-card">
+                    <div class="category-label">Content & Media</div>
+                    <ul style="font-size: 0.85rem; color: var(--gray-600); padding-left: 16px;">
+                        <li>Podcast summarizer</li>
+                        <li>Video script generator</li>
+                        <li>Newsletter curator</li>
+                        <li>Social proof collector</li>
+                        <li>Trend analyzer</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Success Stories (hidden by default) -->
+        <div id="success-section" class="section" style="display: none;">
+            <h2>⭐ Success Stories</h2>
+            <p>Products built with AI agent technologies</p>
+            
+            <div class="success-card">
+                <div class="success-icon">🔍</div>
+                <div class="success-content">
+                    <h3>Perplexity AI</h3>
+                    <p>AI-powered search engine with citations. Built with custom RAG + Search APIs.</p>
+                    <p class="success-meta">Valuation: $500M+ | 10M+ users</p>
+                </div>
+            </div>
+            
+            <div class="success-card">
+                <div class="success-icon">🧠</div>
+                <div class="success-content">
+                    <h3>Claude Artifacts</h3>
+                    <p>Interactive code and document generation in chat. Built by Anthropic.</p>
+                    <p class="success-meta">Model: Claude 4 | Used by millions</p>
+                </div>
+            </div>
+            
+            <div class="success-card">
+                <div class="success-icon">⚡</div>
+                <div class="success-content">
+                    <h3>Cursor</h3>
+                    <p>AI-native IDE built on VS Code. Used by thousands of developers daily.</p>
+                    <p class="success-meta">Stack: VS Code fork + GPT-4 + Claude | Revenue: $10M+ ARR</p>
+                </div>
+            </div>
+            
+            <div class="success-card">
+                <div class="success-icon">🤖</div>
+                <div class="success-content">
+                    <h3>Devin (Cognition)</h3>
+                    <p>First AI software engineer. Can complete full software projects autonomously.</p>
+                    <p class="success-meta">Valuation: $2B+ | groundbreaking capabilities</p>
+                </div>
+            </div>
+            
+            <div class="success-card">
+                <div class="success-icon">🔄</div>
+                <div class="success-content">
+                    <h3>Replit Agent</h3>
+                    <p>Build entire apps from natural language descriptions. No coding required.</p>
+                    <p class="success-meta">Platform: Replit | Millions of users</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Future Trends (hidden by default) -->
+        <div id="trends-section" class="section" style="display: none;">
+            <h2>🔮 Future Trends (2026-2027)</h2>
+            <p>Where AI agents are heading</p>
+            
+            <div class="trend-card">
+                <h4>📉 Smaller, Faster Models</h4>
+                <p>7B models matching GPT-4 performance. Local inference becoming mainstream.</p>
+            </div>
+            
+            <div class="trend-card">
+                <h4>🎭 Multi-Modal Agents</h4>
+                <p>Text, image, audio, video in one agent. Native multimodal understanding.</p>
+            </div>
+            
+            <div class="trend-card">
+                <h4>📏 Longer Context</h4>
+                <p>1M+ tokens becoming standard. Whole codebases in single context.</p>
+            </div>
+            
+            <div class="trend-card">
+                <h4>🧠 Better Memory</h4>
+                <p>Persistent agents that remember everything. Lifelong learning.</p>
+            </div>
+            
+            <div class="trend-card">
+                <h4>🔧 Tool Learning</h4>
+                <p>Agents that learn to use new tools autonomously. Self-improving capabilities.</p>
+            </div>
+            
+            <div class="trend-card">
+                <h4>🐜 Agent Swarms</h4>
+                <p>1000s of agents working in parallel. Massive scale automation.</p>
+            </div>
+            
+            <div class="trend-card">
+                <h4>🦾 Embodied AI</h4>
+                <p>Agents controlling robots and IoT devices. Physical world interaction.</p>
+            </div>
+            
+            <div class="trend-card">
+                <h4>👤 Personal AI</h4>
+                <p>Every person has a dedicated AI assistant. Your digital twin.</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p><a href="reference.html">← Reference</a> | <a href="build.html">Build →</a></p>
+    </footer>
+    
+    <script>
+        function showSection(section) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('ideas-section').style.display = section === 'ideas' ? 'block' : 'none';
+            document.getElementById('success-section').style.display = section === 'success' ? 'block' : 'none';
+            document.getElementById('trends-section').style.display = section === 'trends' ? 'block' : 'none';
+        }
+    </script>
+<script>if(sessionStorage.getItem("authenticated")!=="true")window.location.href="home.html";</script>
+</body>
+</html>
