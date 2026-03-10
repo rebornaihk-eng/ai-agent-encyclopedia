@@ -441,8 +441,19 @@ query_engine = query_engine.with_retriever(
 </body>
 </html>
 <script>
-if(sessionStorage.getItem("authenticated")!=="true"){
-  sessionStorage.setItem("redirectAfterLogin", window.location.href);
-  window.location.href="../index.html";
-}
+(function() {
+    const authTime = localStorage.getItem('authTime');
+    const isAuthenticated = localStorage.getItem('authenticated') === 'true' && authTime;
+    
+    if (isAuthenticated) {
+        const hoursSinceAuth = (Date.now() - parseInt(authTime)) / (1000 * 60 * 60);
+        if (hoursSinceAuth >= 24) {
+            localStorage.removeItem('authenticated');
+            localStorage.removeItem('authTime');
+            window.location.href = '../index.html';
+        }
+    } else {
+        window.location.href = '../index.html';
+    }
+})();
 </script>
