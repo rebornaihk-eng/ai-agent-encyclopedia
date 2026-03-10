@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReAct Loop - AI Agent Encyclopedia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --brand-500: #6366F1; --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB; --gray-600: #4B5563; --gray-700: #374151; --gray-800: #1F2937; --gray-900: #111827; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+        h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--brand-500); }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 12px; }
+        p { margin-bottom: 16px; color: var(--gray-700); }
+        .breadcrumb { margin-bottom: 24px; }
+        .breadcrumb a { color: var(--brand-500); text-decoration: none; }
+        .source-badge { display: inline-block; background: #FEE2E2; color: #991B1B; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin: 8px 0; }
+        .diagram-box { background: white; border: 1px solid var(--gray-200); border-radius: 12px; padding: 24px; margin: 24px 0; }
+        .loop-container { border: 2px dashed var(--brand-500); border-radius: 12px; padding: 20px; margin: 16px 0; }
+        .flow-row { display: flex; align-items: center; gap: 8px; margin: 12px 0; flex-wrap: wrap; justify-content: center; }
+        .flow-node { padding: 10px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; min-width: 100px; text-align: center; }
+        .node-blue { background: #3B82F6; color: white; }
+        .node-green { background: #10B981; color: white; }
+        .node-purple { background: #8B5CF6; color: white; }
+        .node-orange { background: #F97316; color: white; }
+        .node-pink { background: #EC4899; color: white; }
+        .flow-down { text-align: center; color: var(--brand-500); font-size: 1.5rem; margin: 8px 0; }
+        code { background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        pre { background: var(--gray-900); color: #10B981; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; line-height: 1.5; margin: 16px 0; }
+        .info-box { background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .info-box strong { color: #92400E; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: var(--gray-100); padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid var(--gray-200); }
+        ul, ol { margin: 16px 0 16px 24px; }
+        li { margin: 8px 0; }
+        .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--gray-200); text-align: center; }
+        .footer a { color: var(--brand-500); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../home.html">🏠 Home</a> / <a href="../design.html">🎨 Design</a> / ReAct Loop
+        </div>
+        
+        <h1>🔁 ReAct Loop</h1>
+        <p class="source-badge">📄 Source: Yao et al., 2022 (arXiv:2210.03629)</p>
+        <p>The ReAct (Reasoning + Acting) pattern enables agents to interleave thinking with action, creating a more transparent and controllable reasoning process.</p>
+        
+        <h2>📐 Official Architecture (from Paper)</h2>
+        <div class="diagram-box" style="text-align: center;">
+            <img src="../assets/images/react-diagram.png" alt="ReAct Architecture" style="max-width: 100%; height: auto; border-radius: 8px;">
+            <p style="font-size: 0.8rem; color: #6B7280; margin-top: 12px;">Source: <a href="https://arxiv.org/abs/2210.03629" target="_blank">ReAct Paper (Yao et al., 2022)</a></p>
+        </div>
+        
+        <h2>🔄 ReAct Loop</h2>
+        <div class="diagram-box">
+            <div class="flow-row">
+                <span class="flow-node node-blue">👤 User Query</span>
+            </div>
+            <div class="flow-down">↓</div>
+            
+            <div class="loop-container">
+                <div class="flow-row">
+                    <span class="flow-node node-purple">💭 Thought</span>
+                </div>
+                <div style="text-align: center; font-size: 0.8rem; color: #6B7280; margin: 4px 0;">"I need to search for X"</div>
+                <div class="flow-down">↓</div>
+                
+                <div class="flow-row">
+                    <span class="flow-node node-orange">⚡ Action</span>
+                </div>
+                <div style="text-align: center; font-size: 0.8rem; color: #6B7280; margin: 4px 0;">search("X")</div>
+                <div class="flow-down">↓</div>
+                
+                <div class="flow-row">
+                    <span class="flow-node node-green">👁️ Observation</span>
+                </div>
+                <div style="text-align: center; font-size: 0.8rem; color: #6B7280; margin: 4px 0;">"Found result..."</div>
+                <div class="flow-down">↓</div>
+                
+                <div class="flow-row">
+                    <span class="flow-node node-pink">Complete?</span>
+                </div>
+                <div style="text-align: center; font-size: 0.8rem; color: #6B7280;">No → Loop back</div>
+            </div>
+            
+            <div class="flow-down">↓ Yes</div>
+            <div class="flow-row">
+                <span class="flow-node node-green">📤 Final Answer</span>
+            </div>
+        </div>
+        
+        <h2>🧠 How It Works</h2>
+        <p>The ReAct pattern alternates between <strong>reasoning traces</strong> (Thought) and <strong>task-specific actions</strong> (Action), allowing the agent to:</p>
+        <ul>
+            <li>Plan ahead before acting</li>
+            <li>Learn from observations</li>
+            <li>Explain its reasoning process</li>
+            <li>Handle complex multi-step tasks</li>
+        </ul>
+        
+        <h2>📝 Example Trace</h2>
+        <pre>Query: "What is the population of the country where the Eiffel Tower is located?"
+
+<strong>Thought 1:</strong> The Eiffel Tower is in Paris, France. I need to find France's population.
+<strong>Action 1:</strong> search("France population 2024")
+<strong>Observation 1:</strong> France has a population of approximately 68 million people as of 2024.
+<strong>Thought 2:</strong> I have the information needed to answer.
+<strong>Action 2:</strong> finish("France has approximately 68 million people")
+
+<strong>Final Answer:</strong> France has approximately 68 million people as of 2024.</pre>
+        
+        <h2>⚡ LangChain Implementation</h2>
+        <pre>from langchain.agents import initialize_agent, Tool
+from langchain_openai import ChatOpenAI
+
+# Define tools
+tools = [
+    Tool(
+        name="Search",
+        func=search_tool,
+        description="Search for information on the web"
+    ),
+    Tool(
+        name="Calculator",
+        func=calculator,
+        description="Perform mathematical calculations"
+    )
+]
+
+# Create ReAct agent
+llm = ChatOpenAI(model="gpt-4", temperature=0)
+agent = initialize_agent(
+    tools,
+    llm,
+    agent="zero-shot-react-description",
+    verbose=True  # Shows thought process
+)
+
+# Run
+result = agent.run("What is 25% of the population of Japan?")</pre>
+        
+        <h2>🎯 When to Use ReAct</h2>
+        <table>
+            <tr><th>Use Case</th><th>Why ReAct Works</th></tr>
+            <tr><td>Multi-step reasoning</td><td>Breaks down complex tasks</td></tr>
+            <tr><td>Tool use required</td><td>Explicit action selection</td></tr>
+            <tr><td>Explainability needed</td><td>Visible thought process</td></tr>
+            <tr><td>Error recovery</td><td>Can observe and adjust</td></tr>
+        </table>
+        
+        <h2>⚠️ Common Pitfalls</h2>
+        <ol>
+            <li><strong>Too many iterations</strong> - Set <code>max_iterations</code> to prevent infinite loops</li>
+            <li><strong>Poor tool descriptions</strong> - Agent can't select the right tool</li>
+            <li><strong>No early stopping</strong> - Agent keeps looping even when done</li>
+            <li><strong>Observation too long</strong> - Truncate tool outputs to avoid context overflow</li>
+        </ol>
+        
+        <div class="info-box">
+            <strong>Best Practice:</strong> Always set <code>max_iterations=10</code> and use <code>handle_parsing_errors=True</code> to gracefully handle malformed actions.
+        </div>
+        
+        <h2>📚 Original Paper</h2>
+        <p><strong>ReAct: Synergizing Reasoning and Acting in Language Models</strong></p>
+        <p>Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik R. Narasimhan, Yuan Cao</p>
+        <p><a href="https://arxiv.org/abs/2210.03629" target="_blank">arXiv:2210.03629</a></p>
+        
+        <h2>🔗 Related Patterns</h2>
+        <ul>
+            <li><a href="rag-pipeline.html">RAG Pipeline</a> - Often combined with ReAct for knowledge retrieval</li>
+            <li><a href="langgraph-state-machine.html">LangGraph State Machine</a> - More structured version of ReAct</li>
+            <li><a href="multi-agent-crewai.html">Multi-Agent (CrewAI)</a> - Multiple ReAct agents working together</li>
+        </ul>
+        
+        <div class="footer">
+            <p><a href="../design.html">← Back to Design Patterns</a></p>
+            <p style="font-size: 0.8rem; color: #6B7280; margin-top: 16px;">📊 Last updated: 2026-03-10 | Source: arXiv:2210.03629, LangChain Docs</p>
+        </div>
+    </div>
+</body>
+</html>
