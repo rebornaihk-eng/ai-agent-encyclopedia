@@ -184,4 +184,9 @@ result = agent.run("What is 25% of the population of Japan?")</pre>
     </div>
 </body>
 </html>
-<script>if(sessionStorage.getItem("authenticated")!=="true")window.location.href="../index.html";</script>
+<script>
+if(sessionStorage.getItem("authenticated")!=="true"){
+  sessionStorage.setItem("redirectAfterLogin", window.location.href);
+  window.location.href="../index.html";
+}
+</script>
