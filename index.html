@@ -159,7 +159,15 @@
             
             if (password === correctPassword) {
                 sessionStorage.setItem('authenticated', 'true');
-                window.location.href = 'home.html';
+                
+                // Check if there's a redirect URL saved
+                const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+                if (redirectUrl) {
+                    sessionStorage.removeItem('redirectAfterLogin');
+                    window.location.href = redirectUrl;
+                } else {
+                    window.location.href = 'home.html';
+                }
             } else {
                 const error = document.getElementById('error');
                 error.style.display = 'block';
@@ -180,7 +188,13 @@
         
         // Check if already logged in
         if (sessionStorage.getItem('authenticated') === 'true') {
-            window.location.href = 'home.html';
+            const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+            if (redirectUrl) {
+                sessionStorage.removeItem('redirectAfterLogin');
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = 'home.html';
+            }
         }
     </script>
     
