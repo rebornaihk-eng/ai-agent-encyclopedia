@@ -153,12 +153,36 @@
     </div>
     
     <script>
+        // Check if already logged in (localStorage persists across tabs)
+        window.onload = function() {
+            const authTime = localStorage.getItem('authTime');
+            if (localStorage.getItem('authenticated') === 'true' && authTime) {
+                const hoursSinceAuth = (Date.now() - parseInt(authTime)) / (1000 * 60 * 60);
+                if (hoursSinceAuth < 24) {
+                    // Already authenticated and not expired
+                    const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+                    if (redirectUrl) {
+                        sessionStorage.removeItem('redirectAfterLogin');
+                        window.location.href = redirectUrl;
+                    } else {
+                        window.location.href = 'home.html';
+                    }
+                } else {
+                    // Expired - clear storage
+                    localStorage.removeItem('authenticated');
+                    localStorage.removeItem('authTime');
+                }
+            }
+        };
+        
         function checkPassword() {
             const password = document.getElementById('password').value;
             const correctPassword = 'ai-agent-2025';  // 🔐 Change this to your password
             
             if (password === correctPassword) {
-                sessionStorage.setItem('authenticated', 'true');
+                // Save to localStorage (persists across tabs/sessions)
+                localStorage.setItem('authenticated', 'true');
+                localStorage.setItem('authTime', Date.now().toString());
                 
                 // Check if there's a redirect URL saved
                 const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
@@ -185,17 +209,6 @@
         document.getElementById('password').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') checkPassword();
         });
-        
-        // Check if already logged in
-        if (sessionStorage.getItem('authenticated') === 'true') {
-            const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
-            if (redirectUrl) {
-                sessionStorage.removeItem('redirectAfterLogin');
-                window.location.href = redirectUrl;
-            } else {
-                window.location.href = 'home.html';
-            }
-        }
     </script>
     
     <style>
