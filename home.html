@@ -208,12 +208,19 @@
             transition: all 0.2s;
             text-decoration: none;
             color: inherit;
+            cursor: pointer;
+            display: block;
         }
         
         .section-card:hover {
             box-shadow: var(--shadow-lg);
             transform: translateY(-2px);
-            border-color: var(--brand-200);
+            border-color: var(--brand-500);
+            text-decoration: none;
+        }
+        
+        .section-card:active {
+            transform: translateY(0);
         }
         
         .section-icon {
@@ -516,31 +523,31 @@
         <div class="section-grid">
             <a href="reference.html" class="section-card">
                 <div class="section-icon icon-reference">📖</div>
-                <h3>Reference</h3>
+                <h3>Reference <span style="font-size: 1rem; opacity: 0.5;">→</span></h3>
                 <p>Frameworks, Agentic Coders, Platforms, Key Technologies, Comparison Tables</p>
             </a>
             
             <a href="design.html" class="section-card">
                 <div class="section-icon icon-design">🎨</div>
-                <h3>Design</h3>
+                <h3>Design <span style="font-size: 1rem; opacity: 0.5;">→</span></h3>
                 <p>10+ Design Patterns, Integration Patterns, Decision Trees, Architecture Templates</p>
             </a>
             
             <a href="innovate.html" class="section-card">
                 <div class="section-icon icon-innovate">💡</div>
-                <h3>Innovate</h3>
+                <h3>Innovate <span style="font-size: 1rem; opacity: 0.5;">→</span></h3>
                 <p>50+ Project Ideas, Use Cases Gallery, Success Stories, Future Trends</p>
             </a>
             
             <a href="build.html" class="section-card">
                 <div class="section-icon icon-build">🚀</div>
-                <h3>Build</h3>
+                <h3>Build <span style="font-size: 1rem; opacity: 0.5;">→</span></h3>
                 <p>Quick Start Guides, Code Examples, Deployment, Templates & Starters</p>
             </a>
             
             <a href="learn.html" class="section-card">
                 <div class="section-icon icon-learn">🎓</div>
-                <h3>Learn</h3>
+                <h3>Learn <span style="font-size: 1rem; opacity: 0.5;">→</span></h3>
                 <p>Learning Path, Best Resources, Community Hub, Cost Calculator</p>
             </a>
         </div>
