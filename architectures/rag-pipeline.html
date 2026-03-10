@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Pipeline - AI Agent Encyclopedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-500: #6366F1;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+        h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--brand-500); }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 12px; }
+        p { margin-bottom: 16px; color: var(--gray-700); }
+        .breadcrumb { margin-bottom: 24px; }
+        .breadcrumb a { color: var(--brand-500); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .source-badge { display: inline-block; background: #DBEAFE; color: #1E40AF; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin: 8px 0; }
+        .diagram-box { background: white; border: 1px solid var(--gray-200); border-radius: 12px; padding: 24px; margin: 24px 0; }
+        .diagram-box h4 { margin-bottom: 16px; }
+        .flow-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+        .flow-node { padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
+        .node-blue { background: #3B82F6; color: white; }
+        .node-green { background: #10B981; color: white; }
+        .node-purple { background: #8B5CF6; color: white; }
+        .node-orange { background: #F97316; color: white; }
+        .flow-arrow { color: var(--brand-500); font-weight: bold; }
+        code { background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        pre { background: var(--gray-900); color: #10B981; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; line-height: 1.5; margin: 16px 0; }
+        .info-box { background: #EFF6FF; border-left: 4px solid #3B82F6; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .info-box strong { color: #1E40AF; }
+        ul, ol { margin: 16px 0 16px 24px; }
+        li { margin: 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: var(--gray-100); padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid var(--gray-200); }
+        .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--gray-200); text-align: center; }
+        .footer a { color: var(--brand-500); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../home.html">🏠 Home</a> / <a href="../design.html">🎨 Design</a> / RAG Pipeline
+        </div>
+        
+        <h1>🔄 RAG Pipeline</h1>
+        <p class="source-badge">📚 Source: LlamaIndex Docs, LangChain Docs</p>
+        <p>Retrieval-Augmented Generation (RAG) combines information retrieval with LLM generation to produce accurate, grounded responses based on your own data.</p>
+        
+        <h2>📐 Architecture Overview</h2>
+        <div class="diagram-box">
+            <h4>Ingestion Pipeline</h4>
+            <div class="flow-row">
+                <span class="flow-node node-orange">📄 Documents</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-purple">Chunker</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-blue">Embeddings</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-green">Vector DB</span>
+            </div>
+            
+            <h4 style="margin-top: 20px;">Query Pipeline</h4>
+            <div class="flow-row">
+                <span class="flow-node node-blue">Query</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-blue">Embed</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-green">Search</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-purple">Context</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-orange">LLM</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-node node-green">Response</span>
+            </div>
+        </div>
+        
+        <h2>🧩 Core Components</h2>
+        
+        <h3>1. Document Loaders</h3>
+        <p>Load documents from various sources (PDF, Markdown, HTML, databases, APIs).</p>
+        <pre>from llama_index.core import SimpleDirectoryReader
+
+documents = SimpleDirectoryReader("./data").load_data()</pre>
+        
+        <h3>2. Text Splitters / Chunkers</h3>
+        <p>Split documents into smaller chunks for efficient retrieval.</p>
+        <div class="info-box">
+            <strong>Best Practice:</strong> Chunk size 512-1024 tokens with 10-20% overlap to maintain context.
+        </div>
+        <pre>from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+chunks = splitter.split_documents(documents)</pre>
+        
+        <h3>3. Embedding Models</h3>
+        <p>Convert text chunks into vector representations.</p>
+        <table>
+            <tr><th>Model</th><th>Dimensions</th><th>Speed</th><th>Best For</th></tr>
+            <tr><td>OpenAI text-embedding-3-small</td><td>1536</td><td>Fast</td><td>General use</td></tr>
+            <tr><td>OpenAI text-embedding-3-large</td><td>3072</td><td>Medium</td><td>High accuracy</td></tr>
+            <tr><td>all-MiniLM-L6-v2 (local)</td><td>384</td><td>Fastest</td><td>Privacy/Cost</td></tr>
+        </table>
+        
+        <h3>4. Vector Databases</h3>
+        <p>Store and search embeddings efficiently.</p>
+        <table>
+            <tr><th>Database</th><th>Type</th><th>Free Tier</th></tr>
+            <tr><td>Pinecone</td><td>Managed Cloud</td><td>✅ Yes</td></tr>
+            <tr><td>Chroma</td><td>Embedded/Local</td><td>✅ Yes (unlimited)</td></tr>
+            <tr><td>Weaviate</td><td>Self-hosted</td><td>✅ Yes (self-host)</td></tr>
+            <tr><td>Qdrant</td><td>Self-hosted</td><td>✅ Yes (self-host)</td></tr>
+        </table>
+        
+        <h3>5. Retrieval Strategies</h3>
+        <ul>
+            <li><strong>Semantic Search</strong> - Cosine similarity between query and chunk embeddings</li>
+            <li><strong>Hybrid Search</strong> - Combine semantic + keyword (BM25) search</li>
+            <li><strong>Reranking</strong> - Use cross-encoder to reorder results for relevance</li>
+            <li><strong>Multi-Query</strong> - Generate multiple queries to improve recall</li>
+        </ul>
+        
+        <h2>📝 Complete Example (LlamaIndex)</h2>
+        <pre>from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+
+# 1. Load documents
+documents = SimpleDirectoryReader("./data").load_data()
+
+# 2. Create index (auto chunks + embeds + stores)
+index = VectorStoreIndex.from_documents(documents)
+
+# 3. Create query engine
+query_engine = index.as_query_engine(
+    similarity_top_k=3,  # Retrieve top 3 chunks
+    response_mode="compact"
+)
+
+# 4. Query
+response = query_engine.query("What is the main topic?")
+print(response)</pre>
+        
+        <h2>⚡ Advanced Patterns</h2>
+        
+        <h3>Hybrid RAG (Semantic + Keyword)</h3>
+        <pre>from llama_index.core.retrievers import VectorIndexRetriever
+from llama_index.retrievers.bm25 import BM25Retriever
+from llama_index.core.retrievers import QueryFusionRetriever
+
+vector_retriever = VectorIndexRetriever(index=index, similarity_top_k=5)
+bm25_retriever = BM25Retriever.from_defaults(nodes=nodes, similarity_top_k=5)
+
+# Combine both
+fusion_retriever = QueryFusionRetriever(
+    retrievers=[vector_retriever, bm25_retriever],
+    similarity_top_k=5
+)</pre>
+        
+        <h3>RAG with Reranking</h3>
+        <pre>from llama_index.postprocessor.cohere_rerank import CohereRerank
+
+query_engine = index.as_query_engine(
+    similarity_top_k=10  # Get more candidates
+)
+
+# Rerank to top 3
+query_engine = query_engine.with_retriever(
+    reranker=CohereRerank(top_n=3)
+)</pre>
+        
+        <h2>🎯 When to Use RAG</h2>
+        <ul>
+            <li>✅ Q&A over your own documents</li>
+            <li>✅ Knowledge base chatbots</li>
+            <li>✅ Document search with summaries</li>
+            <li>✅ Enterprise search</li>
+            <li>✅ Research paper analysis</li>
+        </ul>
+        
+        <h2>⚠️ Common Pitfalls</h2>
+        <ol>
+            <li><strong>Chunk size too large</strong> - Dilutes relevance signals</li>
+            <li><strong>No chunk overlap</strong> - Loses context at boundaries</li>
+            <li><strong>Retrieving too many chunks</strong> - Exceeds context window, adds noise</li>
+            <li><strong>Not reranking</strong> - Semantic search alone isn't perfect</li>
+            <li><strong>Ignoring metadata</strong> - Can filter by date, source, etc.</li>
+        </ol>
+        
+        <h2>📚 Official Resources</h2>
+        <ul>
+            <li><a href="https://docs.llamaindex.ai/en/stable/understanding/putting_it_all_together/q_and_a/" target="_blank">LlamaIndex Q&A Patterns</a></li>
+            <li><a href="https://python.langchain.com/docs/use_cases/question_answering/" target="_blank">LangChain Q&A Tutorial</a></li>
+            <li><a href="https://www.pinecone.io/learn/retrieval-augmented-generation/" target="_blank">Pinecone RAG Guide</a></li>
+        </ul>
+        
+        <div class="footer">
+            <p><a href="../design.html">← Back to Design Patterns</a></p>
+            <p style="font-size: 0.8rem; color: #6B7280; margin-top: 16px;">📊 Last updated: 2026-03-10 | Sources: LlamaIndex Docs, LangChain Docs</p>
+        </div>
+    </div>
+</body>
+</html>
