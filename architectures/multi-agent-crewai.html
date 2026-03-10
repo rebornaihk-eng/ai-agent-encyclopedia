@@ -51,8 +51,18 @@
         
         <h2>📐 Official Architecture Diagram</h2>
         <div class="diagram-box" style="text-align: center;">
-            <img src="../assets/images/crewai-diagram.png" alt="CrewAI Architecture" style="max-width: 100%; height: auto; border-radius: 8px;">
+            <img src="https://raw.githubusercontent.com/crewAIInc/crewAI/main/docs/images/asset.png" alt="CrewAI Architecture" style="max-width: 100%; height: auto; border-radius: 8px;" onerror="this.style.display='none'">
             <p style="font-size: 0.8rem; color: #6B7280; margin-top: 12px;">Source: <a href="https://github.com/crewAIInc/crewAI" target="_blank">CrewAI GitHub Repository</a></p>
+            <div class="fallback-diagram" style="margin-top: 20px; text-align: left;">
+                <p style="font-weight: 600; color: #374151;">CrewAI Multi-Agent Flow:</p>
+                <ol style="margin-left: 20px; line-height: 2;">
+                    <li><strong>Manager Agent</strong> - Orchestrates task delegation</li>
+                    <li><strong>Specialist Agents</strong> - Execute domain-specific tasks</li>
+                    <li><strong>Shared Memory</strong> - Enables agent communication</li>
+                    <li><strong>Tools</strong> - External capabilities (search, APIs)</li>
+                    <li><strong>Output</strong> - Combined results</li>
+                </ol>
+            </div>
         </div>
         
         <h2>🔄 Flow Overview</h2>
