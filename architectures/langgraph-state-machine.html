@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph State Machine - AI Agent Encyclopedia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --brand-500: #6366F1; --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB; --gray-600: #4B5563; --gray-700: #374151; --gray-800: #1F2937; --gray-900: #111827; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+        h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--brand-500); }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 12px; }
+        p { margin-bottom: 16px; color: var(--gray-700); }
+        .breadcrumb { margin-bottom: 24px; }
+        .breadcrumb a { color: var(--brand-500); text-decoration: none; }
+        .source-badge { display: inline-block; background: #EEF2FF; color: #3730A3; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin: 8px 0; }
+        .diagram-box { background: white; border: 1px solid var(--gray-200); border-radius: 12px; padding: 24px; margin: 24px 0; }
+        code { background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        pre { background: var(--gray-900); color: #10B981; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; line-height: 1.5; margin: 16px 0; }
+        .info-box { background: #F0FDF4; border-left: 4px solid #22C55E; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .info-box strong { color: #166534; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: var(--gray-100); padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid var(--gray-200); }
+        ul, ol { margin: 16px 0 16px 24px; }
+        li { margin: 8px 0; }
+        .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--gray-200); text-align: center; }
+        .footer a { color: var(--brand-500); text-decoration: none; }
+        /* SVG Diagram Styles */
+        .svg-container { text-align: center; margin: 20px 0; }
+        .svg-container svg { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../home.html">🏠 Home</a> / <a href="../design.html">🎨 Design</a> / LangGraph State Machine
+        </div>
+        
+        <h1>🔀 LangGraph State Machine</h1>
+        <p class="source-badge">📚 Source: LangChain Official Docs, GitHub (26K stars)</p>
+        <p>LangGraph is a low-level orchestration framework for building, managing, and deploying long-running, stateful agents as graphs.</p>
+        
+        <h2>📐 Official Architecture</h2>
+        <div class="diagram-box">
+            <div class="svg-container">
+                <!-- State Machine Diagram -->
+                <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
+                    <!-- START -->
+                    <circle cx="100" cy="100" r="30" fill="#10B981" stroke="#059669" stroke-width="2"/>
+                    <text x="100" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="12">START</text>
+                    
+                    <!-- Node A -->
+                    <rect x="230" y="70" width="120" height="60" rx="8" fill="#3B82F6" stroke="#2563EB" stroke-width="2"/>
+                    <text x="290" y="105" text-anchor="middle" fill="white" font-weight="bold">node_a</text>
+                    
+                    <!-- Node B -->
+                    <rect x="230" y="200" width="120" height="60" rx="8" fill="#8B5CF6" stroke="#7C3AED" stroke-width="2"/>
+                    <text x="290" y="235" text-anchor="middle" fill="white" font-weight="bold">node_b</text>
+                    
+                    <!-- Conditional Node -->
+                    <polygon points="450,100 510,130 510,170 450,200 390,170 390,130" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+                    <text x="450" y="155" text-anchor="middle" fill="white" font-weight="bold" font-size="11">conditional</text>
+                    
+                    <!-- END -->
+                    <circle cx="450" cy="320" r="30" fill="#EF4444" stroke="#DC2626" stroke-width="2"/>
+                    <text x="450" y="325" text-anchor="middle" fill="white" font-weight="bold" font-size="12">END</text>
+                    
+                    <!-- Edges -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#6366F1"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- START → node_a -->
+                    <line x1="130" y1="100" x2="225" y2="100" stroke="#6366F1" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- node_a → conditional -->
+                    <line x1="350" y1="100" x2="385" y2="130" stroke="#6366F1" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- conditional → node_b -->
+                    <path d="M 450 200 L 450 200 Q 400 200 340 200" stroke="#6366F1" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- node_b → node_a (loop) -->
+                    <path d="M 230 230 Q 170 230 170 150 Q 170 100 225 100" stroke="#6366F1" stroke-width="2" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
+                    
+                    <!-- conditional → END -->
+                    <line x1="450" y1="200" x2="450" y2="285" stroke="#6366F1" stroke-width="2" marker-end="url(#arrowhead)"/>
+                </svg>
+            </div>
+            <p style="font-size: 0.8rem; color: #6B7280; text-align: center;">Source: <a href="https://github.com/langchain-ai/langgraph" target="_blank">LangGraph GitHub Repository</a></p>
+        </div>
+        
+        <h2>🧩 Key Concepts</h2>
+        
+        <h3>StateGraph</h3>
+        <p>The core building block that defines nodes, edges, and state management.</p>
+        
+        <h3>State (TypedDict)</h3>
+        <p>A shared state object passed between nodes. Each node can read and modify it.</p>
+        <pre>from typing_extensions import TypedDict
+
+class State(TypedDict):
+    messages: list[str]
+    count: int
+    context: str</pre>
+        
+        <h3>Nodes</h3>
+        <p>Functions that process state and return updates.</p>
+        <pre>def node_a(state: State) -> dict:
+    # Process state
+    return {"messages": state["messages"] + ["Hello"]}</pre>
+        
+        <h3>Edges</h3>
+        <p>Define flow between nodes. Can be conditional.</p>
+        <pre>from langgraph.graph import START, END
+
+graph = StateGraph(State)
+graph.add_node("node_a", node_a)
+graph.add_edge(START, "node_a")
+graph.add_edge("node_a", END)</pre>
+        
+        <h2>📝 Complete Example</h2>
+        <pre>from langgraph.graph import START, END, StateGraph
+from typing_extensions import TypedDict
+
+# 1. Define State
+class State(TypedDict):
+    text: str
+    count: int
+
+# 2. Define Nodes
+def node_a(state: State) -> dict:
+    return {"text": state["text"] + "a", "count": state["count"] + 1}
+
+def node_b(state: State) -> dict:
+    return {"text": state["text"] + "b"}
+
+def should_continue(state: State) -> str:
+    if state["count"] < 3:
+        return "loop"
+    return "end"
+
+# 3. Build Graph
+graph = StateGraph(State)
+graph.add_node("node_a", node_a)
+graph.add_node("node_b", node_b)
+
+# Add edges
+graph.add_edge(START, "node_a")
+graph.add_conditional_edges(
+    "node_a",
+    should_continue,
+    {"loop": "node_b", "end": END}
+)
+graph.add_edge("node_b", "node_a")
+
+# 4. Compile and Run
+app = graph.compile()
+result = app.invoke({"text": "", "count": 0})
+print(result)  # {'text': 'ababab', 'count': 3}</pre>
+        
+        <h2>🎯 Key Features</h2>
+        <table>
+            <tr><th>Feature</th><th>Description</th></tr>
+            <tr><td>Durable Execution</td><td>Agents persist through failures</td></tr>
+            <tr><td>Human-in-the-loop</td><td>Inspect and modify state at any point</td></tr>
+            <tr><td>Memory</td><td>Short-term + long-term persistent memory</td></tr>
+            <tr><td>Debugging</td><td>LangSmith visualization and tracing</td></tr>
+            <tr><td>Deployment</td><td>LangGraph Platform for production</td></tr>
+        </table>
+        
+        <div class="info-box">
+            <strong>Key Advantage:</strong> LangGraph is built by the LangChain team and integrates seamlessly with LangChain, LangSmith, and other LangChain ecosystem tools. It's the recommended way to build agents in the LangChain ecosystem.
+        </div>
+        
+        <h2>📚 Official Resources</h2>
+        <ul>
+            <li><a href="https://github.com/langchain-ai/langgraph" target="_blank">GitHub Repository</a></li>
+            <li><a href="https://docs.langchain.com/oss/python/langgraph/overview" target="_blank">Official Documentation</a></li>
+            <li><a href="https://langchain-ai.github.io/langgraph/tutorials/introduction/" target="_blank">Introduction Tutorial</a></li>
+        </ul>
+        
+        <div class="footer">
+            <p><a href="../design.html">← Back to Design Patterns</a></p>
+            <p style="font-size: 0.8rem; color: #6B7280; margin-top: 16px;">📊 Last updated: 2026-03-10 | Source: LangGraph Official Docs, GitHub</p>
+        </div>
+    </div>
+</body>
+</html>
