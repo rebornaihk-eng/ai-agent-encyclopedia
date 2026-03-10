@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent (CrewAI) - AI Agent Encyclopedia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --brand-500: #6366F1; --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB; --gray-600: #4B5563; --gray-700: #374151; --gray-800: #1F2937; --gray-900: #111827; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+        h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--brand-500); }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 12px; }
+        p { margin-bottom: 16px; color: var(--gray-700); }
+        .breadcrumb { margin-bottom: 24px; }
+        .breadcrumb a { color: var(--brand-500); text-decoration: none; }
+        .source-badge { display: inline-block; background: #DCFCE7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin: 8px 0; }
+        .diagram-box { background: white; border: 1px solid var(--gray-200); border-radius: 12px; padding: 24px; margin: 24px 0; }
+        .flow-row { display: flex; align-items: center; gap: 12px; margin: 12px 0; flex-wrap: wrap; justify-content: center; }
+        .flow-node { padding: 10px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; min-width: 100px; text-align: center; }
+        .node-blue { background: #3B82F6; color: white; }
+        .node-green { background: #10B981; color: white; }
+        .node-purple { background: #8B5CF6; color: white; }
+        .node-orange { background: #F97316; color: white; }
+        .node-pink { background: #EC4899; color: white; }
+        .node-amber { background: #F59E0B; color: white; }
+        .node-teal { background: #14B8A6; color: white; }
+        code { background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        pre { background: var(--gray-900); color: #10B981; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; line-height: 1.5; margin: 16px 0; }
+        .info-box { background: #EFF6FF; border-left: 4px solid #3B82F6; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: var(--gray-100); padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid var(--gray-200); }
+        ul, ol { margin: 16px 0 16px 24px; }
+        li { margin: 8px 0; }
+        .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--gray-200); text-align: center; }
+        .footer a { color: var(--brand-500); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../home.html">🏠 Home</a> / <a href="../design.html">🎨 Design</a> / Multi-Agent (CrewAI)
+        </div>
+        
+        <h1>👥 Multi-Agent Orchestration (CrewAI)</h1>
+        <p class="source-badge">📚 Source: CrewAI Official Docs, GitHub (45.6K stars)</p>
+        <p>CrewAI is a standalone framework for orchestrating role-playing, autonomous AI agents that work together to accomplish complex tasks.</p>
+        
+        <h2>📐 Official Architecture Diagram</h2>
+        <div class="diagram-box" style="text-align: center;">
+            <img src="../assets/images/crewai-diagram.png" alt="CrewAI Architecture" style="max-width: 100%; height: auto; border-radius: 8px;">
+            <p style="font-size: 0.8rem; color: #6B7280; margin-top: 12px;">Source: <a href="https://github.com/crewAIInc/crewAI" target="_blank">CrewAI GitHub Repository</a></p>
+        </div>
+        
+        <h2>🔄 Flow Overview</h2>
+        <div class="diagram-box">
+            <div class="flow-row">
+                <span class="flow-node node-blue">👤 User Request</span>
+            </div>
+            <div style="text-align: center; color: var(--brand-500); margin: 12px 0;">↓</div>
+            
+            <div class="flow-row">
+                <span class="flow-node node-purple" style="min-width: 150px;">🎯 Manager/Orchestrator</span>
+            </div>
+            <div style="text-align: center; font-size: 0.8rem; color: #6B7280; margin: 4px 0;">Delegates tasks to specialized agents</div>
+            <div style="text-align: center; color: var(--brand-500); margin: 12px 0;">↓</div>
+            
+            <div class="flow-row" style="gap: 16px;">
+                <div style="text-align: center;">
+                    <span class="flow-node node-green">🔍 Researcher</span>
+                    <div style="font-size: 0.7rem; color: #6B7280; margin-top: 4px;">Web + Docs</div>
+                </div>
+                <div style="text-align: center;">
+                    <span class="flow-node node-amber">📊 Analyst</span>
+                    <div style="font-size: 0.7rem; color: #6B7280; margin-top: 4px;">Data Processing</div>
+                </div>
+                <div style="text-align: center;">
+                    <span class="flow-node node-pink">✍️ Writer</span>
+                    <div style="font-size: 0.7rem; color: #6B7280; margin-top: 4px;">Content Creation</div>
+                </div>
+                <div style="text-align: center;">
+                    <span class="flow-node node-orange">✅ Reviewer</span>
+                    <div style="font-size: 0.7rem; color: #6B7280; margin-top: 4px;">Quality Check</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; color: var(--brand-500); margin: 12px 0;">↓</div>
+            <div class="flow-row">
+                <span class="flow-node node-teal">🧠 Shared Memory</span>
+            </div>
+            <div style="text-align: center; color: var(--brand-500); margin: 12px 0;">↓</div>
+            <div class="flow-row">
+                <span class="flow-node node-green">📤 Final Output</span>
+            </div>
+        </div>
+        
+        <h2>🧩 Key Concepts</h2>
+        
+        <h3>Agent Attributes (from Official Docs)</h3>
+        <table>
+            <tr><th>Attribute</th><th>Type</th><th>Description</th></tr>
+            <tr><td><code>role</code></td><td>str</td><td>Defines the agent's function and expertise</td></tr>
+            <tr><td><code>goal</code></td><td>str</td><td>The individual objective guiding decisions</td></tr>
+            <tr><td><code>backstory</code></td><td>str</td><td>Context and personality for the agent</td></tr>
+            <tr><td><code>tools</code></td><td>List[Tool]</td><td>Capabilities available to the agent</td></tr>
+            <tr><td><code>llm</code></td><td>LLM</td><td>Language model powering the agent</td></tr>
+            <tr><td><code>max_iter</code></td><td>int</td><td>Maximum iterations (default: 20)</td></tr>
+            <tr><td><code>allow_delegation</code></td><td>bool</td><td>Can delegate to other agents (default: False)</td></tr>
+        </table>
+        
+        <h2>📝 Complete Example</h2>
+        <pre>from crewai import Agent, Task, Crew, Process
+
+# Define agents
+researcher = Agent(
+    role="Senior Researcher",
+    goal="Uncover cutting-edge developments in AI",
+    backstory="You're an experienced researcher with a passion for AI",
+    tools=[search_tool, web_tool],
+    verbose=True,
+    allow_delegation=False
+)
+
+writer = Agent(
+    role="Technical Writer",
+    goal="Create engaging content",
+    backstory="You're a skilled writer who makes complex topics accessible",
+    verbose=True
+)
+
+# Define tasks
+research = Task(
+    description="Research the latest AI agent frameworks",
+    expected_output="A detailed report on current frameworks",
+    agent=researcher
+)
+
+write = Task(
+    description="Write a blog post based on the research",
+    expected_output="A 2000-word blog post",
+    agent=writer
+)
+
+# Create crew (sequential process)
+crew = Crew(
+    agents=[researcher, writer],
+    tasks=[research, write],
+    process=Process.sequential,
+    verbose=True
+)
+
+# Run
+result = crew.kickoff()</pre>
+        
+        <h2>🔄 Process Types</h2>
+        <table>
+            <tr><th>Process</th><th>Description</th><th>Use Case</th></tr>
+            <tr><td><code>sequential</code></td><td>Tasks run one after another</td><td>Linear workflows</td></tr>
+            <tr><td><code>hierarchical</code></td><td>Manager delegates to workers</td><td>Complex projects</td></tr>
+        </table>
+        
+        <h2>🎯 When to Use CrewAI</h2>
+        <ul>
+            <li>✅ Research + content creation workflows</li>
+            <li>✅ Role-based collaboration needed</li>
+            <li>✅ Standalone framework (no LangChain dependency)</li>
+            <li>✅ Enterprise automation</li>
+        </ul>
+        
+        <div class="info-box">
+            <strong>Key Fact:</strong> CrewAI is built entirely from scratch, completely independent of LangChain or other agent frameworks. Over 100,000 developers are certified through their courses.
+        </div>
+        
+        <h2>📚 Official Resources</h2>
+        <ul>
+            <li><a href="https://docs.crewai.com" target="_blank">CrewAI Documentation</a></li>
+            <li><a href="https://github.com/crewAIInc/crewAI" target="_blank">GitHub Repository</a></li>
+            <li><a href="https://learn.crewai.com" target="_blank">CrewAI Academy (Free Courses)</a></li>
+        </ul>
+        
+        <div class="footer">
+            <p><a href="../design.html">← Back to Design Patterns</a></p>
+            <p style="font-size: 0.8rem; color: #6B7280; margin-top: 16px;">📊 Last updated: 2026-03-10 | Source: CrewAI Official Docs, GitHub API</p>
+        </div>
+    </div>
+</body>
+</html>
